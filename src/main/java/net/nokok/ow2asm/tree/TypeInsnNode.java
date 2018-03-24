@@ -28,6 +28,7 @@
 package net.nokok.ow2asm.tree;
 
 import net.nokok.ow2asm.MethodVisitor;
+import net.nokok.ow2asm.Opcodes;
 import net.nokok.ow2asm.Type;
 
 import java.util.Map;
@@ -55,7 +56,7 @@ public class TypeInsnNode extends AbstractInsnNode {
      *                   name (see {@link Type}).
      */
     public TypeInsnNode(final int opcode, final String descriptor) {
-        super(opcode);
+        super(checkOpcode(opcode));
         this.desc = descriptor;
     }
 
@@ -66,7 +67,19 @@ public class TypeInsnNode extends AbstractInsnNode {
      *               INSTANCEOF.
      */
     public void setOpcode(final int opcode) {
-        this.opcode = opcode;
+        this.opcode = checkOpcode(opcode);
+    }
+
+    private static int checkOpcode(int opcode) {
+        switch (opcode) {
+        case Opcodes.NEW:
+        case Opcodes.ANEWARRAY:
+        case Opcodes.CHECKCAST:
+        case Opcodes.INSTANCEOF:
+            return opcode;
+        default:
+            throw new IllegalArgumentException();
+        }
     }
 
     @Override

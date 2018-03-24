@@ -67,8 +67,19 @@ public class ModuleExportNode {
      */
     public ModuleExportNode(final String packaze, final int access, final List<String> modules) {
         this.packaze = packaze;
-        this.access = access;
+        this.access = checkAccess(access);
         this.modules = modules;
+    }
+
+    private static int checkAccess(int access) {
+        switch (access) {
+        case Opcodes.ACC_SYNTHETIC:
+        case Opcodes.ACC_MANDATED:
+            return access;
+        default:
+            throw new IllegalArgumentException();
+
+        }
     }
 
     /**

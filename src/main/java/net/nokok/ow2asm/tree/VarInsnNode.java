@@ -28,6 +28,7 @@
 package net.nokok.ow2asm.tree;
 
 import net.nokok.ow2asm.MethodVisitor;
+import net.nokok.ow2asm.Opcodes;
 
 import java.util.Map;
 
@@ -53,7 +54,7 @@ public class VarInsnNode extends AbstractInsnNode {
      *               local variable.
      */
     public VarInsnNode(final int opcode, final int var) {
-        super(opcode);
+        super(checkOpcode(opcode));
         this.var = var;
     }
 
@@ -64,7 +65,27 @@ public class VarInsnNode extends AbstractInsnNode {
      *               ALOAD, ISTORE, LSTORE, FSTORE, DSTORE, ASTORE or RET.
      */
     public void setOpcode(final int opcode) {
-        this.opcode = opcode;
+        this.opcode = checkOpcode(opcode);
+    }
+
+    private static int checkOpcode(int opcode) {
+        switch (opcode) {
+        case Opcodes.ILOAD:
+        case Opcodes.LLOAD:
+        case Opcodes.FLOAD:
+        case Opcodes.DLOAD:
+        case Opcodes.ALOAD:
+        case Opcodes.ISTORE:
+        case Opcodes.LSTORE:
+        case Opcodes.FSTORE:
+        case Opcodes.DSTORE:
+        case Opcodes.ASTORE:
+        case Opcodes.RET:
+            /* no op*/
+            return opcode;
+        default:
+            throw new IllegalArgumentException();
+        }
     }
 
     @Override

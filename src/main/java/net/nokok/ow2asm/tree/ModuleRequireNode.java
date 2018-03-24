@@ -28,6 +28,7 @@
 package net.nokok.ow2asm.tree;
 
 import net.nokok.ow2asm.ModuleVisitor;
+import net.nokok.ow2asm.Opcodes;
 
 /**
  * A node that represents a required module with its name and access of a module descriptor.
@@ -62,8 +63,21 @@ public class ModuleRequireNode {
      */
     public ModuleRequireNode(final String module, final int access, final String version) {
         this.module = module;
-        this.access = access;
+        this.access = checkAccess(access);
         this.version = version;
+    }
+
+    private static int checkAccess(int access) {
+        switch (access) {
+        case Opcodes.ACC_TRANSITIVE:
+        case Opcodes.ACC_STATIC_PHASE:
+        case Opcodes.ACC_SYNTHETIC:
+        case Opcodes.ACC_MANDATED:
+            return access;
+        default:
+            throw new IllegalArgumentException();
+        }
+
     }
 
     /**

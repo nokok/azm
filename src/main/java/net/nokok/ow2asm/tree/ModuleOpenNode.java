@@ -28,6 +28,7 @@
 package net.nokok.ow2asm.tree;
 
 import net.nokok.ow2asm.ModuleVisitor;
+import net.nokok.ow2asm.Opcodes;
 
 import java.util.List;
 
@@ -66,8 +67,18 @@ public class ModuleOpenNode {
      */
     public ModuleOpenNode(final String packaze, final int access, final List<String> modules) {
         this.packaze = packaze;
-        this.access = access;
+        this.access = checkAccess(access);
         this.modules = modules;
+    }
+
+    private static int checkAccess(int access) {
+        switch (access) {
+        case Opcodes.ACC_SYNTHETIC:
+        case Opcodes.ACC_MANDATED:
+            return access;
+        default:
+            throw new IllegalArgumentException();
+        }
     }
 
     /**

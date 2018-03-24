@@ -108,8 +108,19 @@ public class ModuleNode extends ModuleVisitor {
             throw new IllegalStateException();
         }
         this.name = name;
-        this.access = access;
+        this.access = checkAccess(access);
         this.version = version;
+    }
+
+    private static int checkAccess(int access) {
+        switch (access) {
+        case Opcodes.ACC_OPEN:
+        case Opcodes.ACC_SYNTHETIC:
+        case Opcodes.ACC_MANDATED:
+            return access;
+        default:
+            throw new IllegalArgumentException();
+        }
     }
 
     // TODO(forax): why is there no 'mainClass' and 'packages' parameters in this constructor?
@@ -140,7 +151,7 @@ public class ModuleNode extends ModuleVisitor {
             final List<ModuleProvideNode> provides) {
         super(api);
         this.name = name;
-        this.access = access;
+        this.access = checkAccess(access);
         this.version = version;
         this.requires = requires;
         this.exports = exports;
