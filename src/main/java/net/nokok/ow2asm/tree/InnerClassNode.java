@@ -37,27 +37,13 @@ import net.nokok.ow2asm.Type;
  */
 public class InnerClassNode {
 
-    /**
-     * The internal name of an inner class (see {@link Type#getInternalName()}).
-     */
-    public String name;
+    private String name;
 
-    /**
-     * The internal name of the class to which the inner class belongs (see {@link
-     * Type#getInternalName()}). May be <tt>null</tt>.
-     */
-    public String outerName;
+    private String outerName;
 
-    /**
-     * The (simple) name of the inner class inside its enclosing class. May be <tt>null</tt> for
-     * anonymous inner classes.
-     */
-    public String innerName;
+    private String innerName;
 
-    /**
-     * The access flags of the inner class as originally declared in the enclosing class.
-     */
-    public int access;
+    private int access;
 
     /**
      * Constructs a new {@link InnerClassNode}.
@@ -73,10 +59,10 @@ public class InnerClassNode {
      */
     public InnerClassNode(
             final String name, final String outerName, final String innerName, final int access) {
-        this.name = name;
-        this.outerName = outerName;
-        this.innerName = innerName;
-        this.access = access;
+        this.setName(name);
+        this.setOuterName(outerName);
+        this.setInnerName(innerName);
+        this.setAccess(access);
     }
 
     /**
@@ -85,6 +71,52 @@ public class InnerClassNode {
      * @param classVisitor a class visitor.
      */
     public void accept(final ClassVisitor classVisitor) {
-        classVisitor.visitInnerClass(name, outerName, innerName, access);
+        classVisitor.visitInnerClass(getName(), getOuterName(), getInnerName(), getAccess());
+    }
+
+    /**
+     * The internal name of an inner class (see {@link Type#getInternalName()}).
+     */
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * The internal name of the class to which the inner class belongs (see {@link
+     * Type#getInternalName()}). May be <tt>null</tt>.
+     */
+    public String getOuterName() {
+        return outerName;
+    }
+
+    public void setOuterName(String outerName) {
+        this.outerName = outerName;
+    }
+
+    /**
+     * The (simple) name of the inner class inside its enclosing class. May be <tt>null</tt> for
+     * anonymous inner classes.
+     */
+    public String getInnerName() {
+        return innerName;
+    }
+
+    public void setInnerName(String innerName) {
+        this.innerName = innerName;
+    }
+
+    /**
+     * The access flags of the inner class as originally declared in the enclosing class.
+     */
+    public int getAccess() {
+        return access;
+    }
+
+    public void setAccess(int access) {
+        this.access = access;
     }
 }

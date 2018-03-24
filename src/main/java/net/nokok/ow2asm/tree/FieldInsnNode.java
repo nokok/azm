@@ -40,21 +40,11 @@ import java.util.Map;
  */
 public class FieldInsnNode extends AbstractInsnNode {
 
-    /**
-     * The internal name of the field's owner class (see {@link
-     * Type#getInternalName}).
-     */
-    public String owner;
+    private String owner;
 
-    /**
-     * The field's name.
-     */
-    public String name;
+    private String name;
 
-    /**
-     * The field's descriptor (see {@link Type}).
-     */
-    public String desc;
+    private String desc;
 
     /**
      * Constructs a new {@link FieldInsnNode}.
@@ -69,9 +59,9 @@ public class FieldInsnNode extends AbstractInsnNode {
     public FieldInsnNode(
             final int opcode, final String owner, final String name, final String descriptor) {
         super(opcode);
-        this.owner = owner;
-        this.name = name;
-        this.desc = descriptor;
+        this.setOwner(owner);
+        this.setName(name);
+        this.setDesc(descriptor);
     }
 
     /**
@@ -91,12 +81,46 @@ public class FieldInsnNode extends AbstractInsnNode {
 
     @Override
     public void accept(final MethodVisitor methodVisitor) {
-        methodVisitor.visitFieldInsn(opcode, owner, name, desc);
+        methodVisitor.visitFieldInsn(opcode, getOwner(), getName(), getDesc());
         acceptAnnotations(methodVisitor);
     }
 
     @Override
     public AbstractInsnNode clone(final Map<LabelNode, LabelNode> clonedLabels) {
-        return new FieldInsnNode(opcode, owner, name, desc).cloneAnnotations(this);
+        return new FieldInsnNode(opcode, getOwner(), getName(), getDesc()).cloneAnnotations(this);
+    }
+
+    /**
+     * The internal name of the field's owner class (see {@link
+     * Type#getInternalName}).
+     */
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
+    /**
+     * The field's name.
+     */
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * The field's descriptor (see {@link Type}).
+     */
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
     }
 }

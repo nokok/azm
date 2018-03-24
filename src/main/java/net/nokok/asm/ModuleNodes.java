@@ -48,8 +48,8 @@ public class ModuleNodes {
 
         // 何故かPackagesとmainClassがコンストラクタに無いので追加する。
         // ASM6側のバグに思える(TODOコメントがある)
-        moduleNode.packages = this.packages;
-        moduleNode.mainClass = this.mainClass;
+        moduleNode.setPackages(this.packages);
+        moduleNode.setMainClass(this.mainClass);
         writer.visit(Opcodes.ASM6, Opcodes.ACC_MODULE, "module-info", null, null, null);
         moduleNode.accept(writer);
         writer.visitEnd();

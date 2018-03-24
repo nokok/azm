@@ -41,26 +41,13 @@ import java.util.Map;
  */
 public class MethodInsnNode extends AbstractInsnNode {
 
-    /**
-     * The internal name of the method's owner class (see {@link
-     * Type#getInternalName()}).
-     */
-    public String owner;
+    private String owner;
 
-    /**
-     * The method's name.
-     */
-    public String name;
+    private String name;
 
-    /**
-     * The method's descriptor (see {@link Type}).
-     */
-    public String desc;
+    private String desc;
 
-    /**
-     * Whether the method's owner class if an interface.
-     */
-    public boolean itf;
+    private boolean itf;
 
     /**
      * Constructs a new {@link MethodInsnNode}.
@@ -97,10 +84,10 @@ public class MethodInsnNode extends AbstractInsnNode {
             final String descriptor,
             final boolean isInterface) {
         super(opcode);
-        this.owner = owner;
-        this.name = name;
-        this.desc = descriptor;
-        this.itf = isInterface;
+        this.setOwner(owner);
+        this.setName(name);
+        this.setDesc(descriptor);
+        this.setItf(isInterface);
     }
 
     /**
@@ -120,12 +107,57 @@ public class MethodInsnNode extends AbstractInsnNode {
 
     @Override
     public void accept(final MethodVisitor methodVisitor) {
-        methodVisitor.visitMethodInsn(opcode, owner, name, desc, itf);
+        methodVisitor.visitMethodInsn(opcode, getOwner(), getName(), getDesc(), isItf());
         acceptAnnotations(methodVisitor);
     }
 
     @Override
     public AbstractInsnNode clone(final Map<LabelNode, LabelNode> clonedLabels) {
-        return new MethodInsnNode(opcode, owner, name, desc, itf).cloneAnnotations(this);
+        return new MethodInsnNode(opcode, getOwner(), getName(), getDesc(), isItf()).cloneAnnotations(this);
+    }
+
+    /**
+     * The internal name of the method's owner class (see {@link
+     * Type#getInternalName()}).
+     */
+    public String getOwner() {
+        return owner;
+    }
+
+    public void setOwner(String owner) {
+        this.owner = owner;
+    }
+
+    /**
+     * The method's name.
+     */
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * The method's descriptor (see {@link Type}).
+     */
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
+    /**
+     * Whether the method's owner class if an interface.
+     */
+    public boolean isItf() {
+        return itf;
+    }
+
+    public void setItf(boolean itf) {
+        this.itf = itf;
     }
 }

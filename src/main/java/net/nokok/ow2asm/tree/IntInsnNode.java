@@ -38,10 +38,7 @@ import java.util.Map;
  */
 public class IntInsnNode extends AbstractInsnNode {
 
-    /**
-     * The operand of this instruction.
-     */
-    public int operand;
+    private int operand;
 
     /**
      * Constructs a new {@link IntInsnNode}.
@@ -52,7 +49,7 @@ public class IntInsnNode extends AbstractInsnNode {
      */
     public IntInsnNode(final int opcode, final int operand) {
         super(opcode);
-        this.operand = operand;
+        this.setOperand(operand);
     }
 
     /**
@@ -71,12 +68,23 @@ public class IntInsnNode extends AbstractInsnNode {
 
     @Override
     public void accept(final MethodVisitor methodVisitor) {
-        methodVisitor.visitIntInsn(opcode, operand);
+        methodVisitor.visitIntInsn(opcode, getOperand());
         acceptAnnotations(methodVisitor);
     }
 
     @Override
     public AbstractInsnNode clone(final Map<LabelNode, LabelNode> clonedLabels) {
-        return new IntInsnNode(opcode, operand).cloneAnnotations(this);
+        return new IntInsnNode(opcode, getOperand()).cloneAnnotations(this);
+    }
+
+    /**
+     * The operand of this instruction.
+     */
+    public int getOperand() {
+        return operand;
+    }
+
+    public void setOperand(int operand) {
+        this.operand = operand;
     }
 }

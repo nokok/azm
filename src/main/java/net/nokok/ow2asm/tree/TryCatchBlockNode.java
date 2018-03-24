@@ -38,36 +38,17 @@ import java.util.List;
  */
 public class TryCatchBlockNode {
 
-    /**
-     * The beginning of the exception handler's scope (inclusive).
-     */
-    public LabelNode start;
+    private LabelNode start;
 
-    /**
-     * The end of the exception handler's scope (exclusive).
-     */
-    public LabelNode end;
+    private LabelNode end;
 
-    /**
-     * The beginning of the exception handler's code.
-     */
-    public LabelNode handler;
+    private LabelNode handler;
 
-    /**
-     * The internal name of the type of exceptions handled by the handler. May be <tt>null</tt> to
-     * catch any exceptions (for "finally" blocks).
-     */
-    public String type;
+    private String type;
 
-    /**
-     * The runtime visible type annotations on the exception handler type. May be <tt>null</tt>.
-     */
-    public List<TypeAnnotationNode> visibleTypeAnnotations;
+    private List<TypeAnnotationNode> visibleTypeAnnotations;
 
-    /**
-     * The runtime invisible type annotations on the exception handler type. May be <tt>null</tt>.
-     */
-    public List<TypeAnnotationNode> invisibleTypeAnnotations;
+    private List<TypeAnnotationNode> invisibleTypeAnnotations;
 
     /**
      * Constructs a new {@link TryCatchBlockNode}.
@@ -80,10 +61,10 @@ public class TryCatchBlockNode {
      */
     public TryCatchBlockNode(
             final LabelNode start, final LabelNode end, final LabelNode handler, final String type) {
-        this.start = start;
-        this.end = end;
-        this.handler = handler;
-        this.type = type;
+        this.setStart(start);
+        this.setEnd(end);
+        this.setHandler(handler);
+        this.setType(type);
     }
 
     /**
@@ -95,14 +76,14 @@ public class TryCatchBlockNode {
      */
     public void updateIndex(final int index) {
         int newTypeRef = 0x42000000 | (index << 8);
-        if (visibleTypeAnnotations != null) {
-            for (int i = 0, n = visibleTypeAnnotations.size(); i < n; ++i) {
-                visibleTypeAnnotations.get(i).typeRef = newTypeRef;
+        if (getVisibleTypeAnnotations() != null) {
+            for (int i = 0, n = getVisibleTypeAnnotations().size(); i < n; ++i) {
+                getVisibleTypeAnnotations().get(i).setTypeRef(newTypeRef);
             }
         }
-        if (invisibleTypeAnnotations != null) {
-            for (int i = 0, n = invisibleTypeAnnotations.size(); i < n; ++i) {
-                invisibleTypeAnnotations.get(i).typeRef = newTypeRef;
+        if (getInvisibleTypeAnnotations() != null) {
+            for (int i = 0, n = getInvisibleTypeAnnotations().size(); i < n; ++i) {
+                getInvisibleTypeAnnotations().get(i).setTypeRef(newTypeRef);
             }
         }
     }
@@ -114,22 +95,89 @@ public class TryCatchBlockNode {
      */
     public void accept(final MethodVisitor methodVisitor) {
         methodVisitor.visitTryCatchBlock(
-                start.getLabel(), end.getLabel(), handler == null ? null : handler.getLabel(), type);
-        if (visibleTypeAnnotations != null) {
-            for (int i = 0, n = visibleTypeAnnotations.size(); i < n; ++i) {
-                TypeAnnotationNode typeAnnotation = visibleTypeAnnotations.get(i);
+                getStart().getLabel(), getEnd().getLabel(), getHandler() == null ? null : getHandler().getLabel(), getType());
+        if (getVisibleTypeAnnotations() != null) {
+            for (int i = 0, n = getVisibleTypeAnnotations().size(); i < n; ++i) {
+                TypeAnnotationNode typeAnnotation = getVisibleTypeAnnotations().get(i);
                 typeAnnotation.accept(
                         methodVisitor.visitTryCatchAnnotation(
-                                typeAnnotation.typeRef, typeAnnotation.typePath, typeAnnotation.desc, true));
+                                typeAnnotation.getTypeRef(), typeAnnotation.getTypePath(), typeAnnotation.getDesc(), true));
             }
         }
-        if (invisibleTypeAnnotations != null) {
-            for (int i = 0, n = invisibleTypeAnnotations.size(); i < n; ++i) {
-                TypeAnnotationNode typeAnnotation = invisibleTypeAnnotations.get(i);
+        if (getInvisibleTypeAnnotations() != null) {
+            for (int i = 0, n = getInvisibleTypeAnnotations().size(); i < n; ++i) {
+                TypeAnnotationNode typeAnnotation = getInvisibleTypeAnnotations().get(i);
                 typeAnnotation.accept(
                         methodVisitor.visitTryCatchAnnotation(
-                                typeAnnotation.typeRef, typeAnnotation.typePath, typeAnnotation.desc, false));
+                                typeAnnotation.getTypeRef(), typeAnnotation.getTypePath(), typeAnnotation.getDesc(), false));
             }
         }
+    }
+
+    /**
+     * The end of the exception handler's scope (exclusive).
+     */
+    public LabelNode getEnd() {
+        return end;
+    }
+
+    public void setEnd(LabelNode end) {
+        this.end = end;
+    }
+
+    /**
+     * The beginning of the exception handler's code.
+     */
+    public LabelNode getHandler() {
+        return handler;
+    }
+
+    public void setHandler(LabelNode handler) {
+        this.handler = handler;
+    }
+
+    /**
+     * The internal name of the type of exceptions handled by the handler. May be <tt>null</tt> to
+     * catch any exceptions (for "finally" blocks).
+     */
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    /**
+     * The runtime visible type annotations on the exception handler type. May be <tt>null</tt>.
+     */
+    public List<TypeAnnotationNode> getVisibleTypeAnnotations() {
+        return visibleTypeAnnotations;
+    }
+
+    public void setVisibleTypeAnnotations(List<TypeAnnotationNode> visibleTypeAnnotations) {
+        this.visibleTypeAnnotations = visibleTypeAnnotations;
+    }
+
+    /**
+     * The runtime invisible type annotations on the exception handler type. May be <tt>null</tt>.
+     */
+    public List<TypeAnnotationNode> getInvisibleTypeAnnotations() {
+        return invisibleTypeAnnotations;
+    }
+
+    public void setInvisibleTypeAnnotations(List<TypeAnnotationNode> invisibleTypeAnnotations) {
+        this.invisibleTypeAnnotations = invisibleTypeAnnotations;
+    }
+
+    /**
+     * The beginning of the exception handler's scope (inclusive).
+     */
+    public LabelNode getStart() {
+        return start;
+    }
+
+    public void setStart(LabelNode start) {
+        this.start = start;
     }
 }

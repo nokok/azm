@@ -143,7 +143,7 @@ public class JSRInlinerAdapter extends MethodNode implements Opcodes {
     @Override
     public void visitJumpInsn(final int opcode, final Label lbl) {
         super.visitJumpInsn(opcode, lbl);
-        LabelNode ln = ((JumpInsnNode) instructions.getLast()).label;
+        LabelNode ln = ((JumpInsnNode) instructions.getLast()).getLabel();
         if (opcode == JSR && !subroutineHeads.containsKey(ln)) {
             subroutineHeads.put(ln, new BitSet());
         }
@@ -231,13 +231,13 @@ public class JSRInlinerAdapter extends MethodNode implements Opcodes {
                 }
 
                 // If the handler has already been processed, skip it.
-                int handlerindex = instructions.indexOf(trycatch.handler);
+                int handlerindex = instructions.indexOf(trycatch.getHandler());
                 if (sub.get(handlerindex)) {
                     continue;
                 }
 
-                int startindex = instructions.indexOf(trycatch.start);
-                int endindex = instructions.indexOf(trycatch.end);
+                int startindex = instructions.indexOf(trycatch.getStart());
+                int endindex = instructions.indexOf(trycatch.getEnd());
                 int nextbit = sub.nextSetBit(startindex);
                 if (nextbit != -1 && nextbit < endindex) {
                     if (LOGGING) {
@@ -290,25 +290,25 @@ public class JSRInlinerAdapter extends MethodNode implements Opcodes {
                 // we do not follow recursively called subroutines here; but any
                 // other sort of branch we do follow
                 JumpInsnNode jnode = (JumpInsnNode) node;
-                int destidx = instructions.indexOf(jnode.label);
+                int destidx = instructions.indexOf(jnode.getLabel());
                 markSubroutineWalkDFS(sub, destidx, anyvisited);
             }
             if (node.getType() == AbstractInsnNode.TABLESWITCH_INSN) {
                 TableSwitchInsnNode tsnode = (TableSwitchInsnNode) node;
-                int destidx = instructions.indexOf(tsnode.dflt);
+                int destidx = instructions.indexOf(tsnode.getDflt());
                 markSubroutineWalkDFS(sub, destidx, anyvisited);
-                for (int i = tsnode.labels.size() - 1; i >= 0; --i) {
-                    LabelNode l = tsnode.labels.get(i);
+                for (int i = tsnode.getLabels().size() - 1; i >= 0; --i) {
+                    LabelNode l = tsnode.getLabels().get(i);
                     destidx = instructions.indexOf(l);
                     markSubroutineWalkDFS(sub, destidx, anyvisited);
                 }
             }
             if (node.getType() == AbstractInsnNode.LOOKUPSWITCH_INSN) {
                 LookupSwitchInsnNode lsnode = (LookupSwitchInsnNode) node;
-                int destidx = instructions.indexOf(lsnode.dflt);
+                int destidx = instructions.indexOf(lsnode.getDflt());
                 markSubroutineWalkDFS(sub, destidx, anyvisited);
-                for (int i = lsnode.labels.size() - 1; i >= 0; --i) {
-                    LabelNode l = lsnode.labels.get(i);
+                for (int i = lsnode.getLabels().size() - 1; i >= 0; --i) {
+                    LabelNode l = lsnode.getLabels().get(i);
                     destidx = instructions.indexOf(l);
                     markSubroutineWalkDFS(sub, destidx, anyvisited);
                 }
@@ -463,7 +463,7 @@ public class JSRInlinerAdapter extends MethodNode implements Opcodes {
                 }
                 newInstructions.add(new JumpInsnNode(GOTO, retlabel));
             } else if (insn.getOpcode() == JSR) {
-                LabelNode lbl = ((JumpInsnNode) insn).label;
+                LabelNode lbl = ((JumpInsnNode) insn).getLabel();
                 BitSet sub = subroutineHeads.get(lbl);
                 Instantiation newinst = new Instantiation(instant, sub);
                 LabelNode startlbl = newinst.gotoLabel(lbl);
@@ -497,15 +497,15 @@ public class JSRInlinerAdapter extends MethodNode implements Opcodes {
                 // TODO use of default toString().
                 log(
                         "try catch block original labels="
-                                + trycatch.start
+                                + trycatch.getStart()
                                 + '-'
-                                + trycatch.end
+                                + trycatch.getEnd()
                                 + "->"
-                                + trycatch.handler);
+                                + trycatch.getHandler());
             }
 
-            final LabelNode start = instant.rangeLabel(trycatch.start);
-            final LabelNode end = instant.rangeLabel(trycatch.end);
+            final LabelNode start = instant.rangeLabel(trycatch.getStart());
+            final LabelNode end = instant.rangeLabel(trycatch.getEnd());
 
             // Ignore empty try/catch regions
             if (start == end) {
@@ -515,7 +515,7 @@ public class JSRInlinerAdapter extends MethodNode implements Opcodes {
                 continue;
             }
 
-            final LabelNode handler = instant.gotoLabel(trycatch.handler);
+            final LabelNode handler = instant.gotoLabel(trycatch.getHandler());
 
             if (LOGGING) {
                 // TODO use of default toString().
@@ -526,16 +526,16 @@ public class JSRInlinerAdapter extends MethodNode implements Opcodes {
                 throw new RuntimeException("Internal error!");
             }
 
-            newTryCatchBlocks.add(new TryCatchBlockNode(start, end, handler, trycatch.type));
+            newTryCatchBlocks.add(new TryCatchBlockNode(start, end, handler, trycatch.getType()));
         }
 
         for (Iterator<LocalVariableNode> it = localVariables.iterator(); it.hasNext(); ) {
             LocalVariableNode lvnode = it.next();
             if (LOGGING) {
-                log("local var " + lvnode.name);
+                log("local var " + lvnode.getName());
             }
-            final LabelNode start = instant.rangeLabel(lvnode.start);
-            final LabelNode end = instant.rangeLabel(lvnode.end);
+            final LabelNode start = instant.rangeLabel(lvnode.getStart());
+            final LabelNode end = instant.rangeLabel(lvnode.getEnd());
             if (start == end) {
                 if (LOGGING) {
                     log("  local variable empty in this sub");
@@ -544,7 +544,7 @@ public class JSRInlinerAdapter extends MethodNode implements Opcodes {
             }
             newLocalVariables.add(
                     new LocalVariableNode(
-                            lvnode.name, lvnode.desc, lvnode.signature, start, end, lvnode.index));
+                            lvnode.getName(), lvnode.getDesc(), lvnode.getSignature(), start, end, lvnode.getIndex()));
         }
     }
 

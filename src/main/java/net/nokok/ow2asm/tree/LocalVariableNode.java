@@ -36,35 +36,17 @@ import net.nokok.ow2asm.MethodVisitor;
  */
 public class LocalVariableNode {
 
-    /**
-     * The name of a local variable.
-     */
-    public String name;
+    private String name;
 
-    /**
-     * The type descriptor of this local variable.
-     */
-    public String desc;
+    private String desc;
 
-    /**
-     * The signature of this local variable. May be <tt>null</tt>.
-     */
-    public String signature;
+    private String signature;
 
-    /**
-     * The first instruction corresponding to the scope of this local variable (inclusive).
-     */
-    public LabelNode start;
+    private LabelNode start;
 
-    /**
-     * The last instruction corresponding to the scope of this local variable (exclusive).
-     */
-    public LabelNode end;
+    private LabelNode end;
 
-    /**
-     * The local variable's index.
-     */
-    public int index;
+    private int index;
 
     /**
      * Constructs a new {@link LocalVariableNode}.
@@ -84,12 +66,12 @@ public class LocalVariableNode {
             final LabelNode start,
             final LabelNode end,
             final int index) {
-        this.name = name;
-        this.desc = descriptor;
-        this.signature = signature;
-        this.start = start;
-        this.end = end;
-        this.index = index;
+        this.setName(name);
+        this.setDesc(descriptor);
+        this.setSignature(signature);
+        this.setStart(start);
+        this.setEnd(end);
+        this.setIndex(index);
     }
 
     /**
@@ -99,6 +81,72 @@ public class LocalVariableNode {
      */
     public void accept(final MethodVisitor methodVisitor) {
         methodVisitor.visitLocalVariable(
-                name, desc, signature, start.getLabel(), end.getLabel(), index);
+                getName(), getDesc(), getSignature(), getStart().getLabel(), getEnd().getLabel(), getIndex());
+    }
+
+    /**
+     * The name of a local variable.
+     */
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * The type descriptor of this local variable.
+     */
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
+    /**
+     * The signature of this local variable. May be <tt>null</tt>.
+     */
+    public String getSignature() {
+        return signature;
+    }
+
+    public void setSignature(String signature) {
+        this.signature = signature;
+    }
+
+    /**
+     * The first instruction corresponding to the scope of this local variable (inclusive).
+     */
+    public LabelNode getStart() {
+        return start;
+    }
+
+    public void setStart(LabelNode start) {
+        this.start = start;
+    }
+
+    /**
+     * The last instruction corresponding to the scope of this local variable (exclusive).
+     */
+    public LabelNode getEnd() {
+        return end;
+    }
+
+    public void setEnd(LabelNode end) {
+        this.end = end;
+    }
+
+    /**
+     * The local variable's index.
+     */
+    public int getIndex() {
+        return index;
+    }
+
+    public void setIndex(int index) {
+        this.index = index;
     }
 }

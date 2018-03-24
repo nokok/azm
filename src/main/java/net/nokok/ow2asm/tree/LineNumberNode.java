@@ -39,15 +39,9 @@ import java.util.Map;
  */
 public class LineNumberNode extends AbstractInsnNode {
 
-    /**
-     * A line number. This number refers to the source file from which the class was compiled.
-     */
-    public int line;
+    private int line;
 
-    /**
-     * The first instruction corresponding to this line number.
-     */
-    public LabelNode start;
+    private LabelNode start;
 
     /**
      * Constructs a new {@link LineNumberNode}.
@@ -58,8 +52,8 @@ public class LineNumberNode extends AbstractInsnNode {
      */
     public LineNumberNode(final int line, final LabelNode start) {
         super(-1);
-        this.line = line;
-        this.start = start;
+        this.setLine(line);
+        this.setStart(start);
     }
 
     @Override
@@ -69,11 +63,33 @@ public class LineNumberNode extends AbstractInsnNode {
 
     @Override
     public void accept(final MethodVisitor methodVisitor) {
-        methodVisitor.visitLineNumber(line, start.getLabel());
+        methodVisitor.visitLineNumber(getLine(), getStart().getLabel());
     }
 
     @Override
     public AbstractInsnNode clone(final Map<LabelNode, LabelNode> clonedLabels) {
-        return new LineNumberNode(line, clone(start, clonedLabels));
+        return new LineNumberNode(getLine(), clone(getStart(), clonedLabels));
+    }
+
+    /**
+     * A line number. This number refers to the source file from which the class was compiled.
+     */
+    public int getLine() {
+        return line;
+    }
+
+    public void setLine(int line) {
+        this.line = line;
+    }
+
+    /**
+     * The first instruction corresponding to this line number.
+     */
+    public LabelNode getStart() {
+        return start;
+    }
+
+    public void setStart(LabelNode start) {
+        this.start = start;
     }
 }

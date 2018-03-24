@@ -221,7 +221,7 @@ public abstract class AbstractInsnNode {
                 TypeAnnotationNode typeAnnotation = visibleTypeAnnotations.get(i);
                 typeAnnotation.accept(
                         methodVisitor.visitInsnAnnotation(
-                                typeAnnotation.typeRef, typeAnnotation.typePath, typeAnnotation.desc, true));
+                                typeAnnotation.getTypeRef(), typeAnnotation.getTypePath(), typeAnnotation.getDesc(), true));
             }
         }
         if (invisibleTypeAnnotations != null) {
@@ -229,7 +229,7 @@ public abstract class AbstractInsnNode {
                 TypeAnnotationNode typeAnnotation = invisibleTypeAnnotations.get(i);
                 typeAnnotation.accept(
                         methodVisitor.visitInsnAnnotation(
-                                typeAnnotation.typeRef, typeAnnotation.typePath, typeAnnotation.desc, false));
+                                typeAnnotation.getTypeRef(), typeAnnotation.getTypePath(), typeAnnotation.getDesc(), false));
             }
         }
     }
@@ -283,7 +283,7 @@ public abstract class AbstractInsnNode {
                 TypeAnnotationNode sourceAnnotation = insnNode.visibleTypeAnnotations.get(i);
                 TypeAnnotationNode cloneAnnotation =
                         new TypeAnnotationNode(
-                                sourceAnnotation.typeRef, sourceAnnotation.typePath, sourceAnnotation.desc);
+                                sourceAnnotation.getTypeRef(), sourceAnnotation.getTypePath(), sourceAnnotation.getDesc());
                 sourceAnnotation.accept(cloneAnnotation);
                 this.visibleTypeAnnotations.add(cloneAnnotation);
             }
@@ -294,7 +294,7 @@ public abstract class AbstractInsnNode {
                 TypeAnnotationNode sourceAnnotation = insnNode.invisibleTypeAnnotations.get(i);
                 TypeAnnotationNode cloneAnnotation =
                         new TypeAnnotationNode(
-                                sourceAnnotation.typeRef, sourceAnnotation.typePath, sourceAnnotation.desc);
+                                sourceAnnotation.getTypeRef(), sourceAnnotation.getTypePath(), sourceAnnotation.getDesc());
                 sourceAnnotation.accept(cloneAnnotation);
                 this.invisibleTypeAnnotations.add(cloneAnnotation);
             }

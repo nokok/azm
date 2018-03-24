@@ -39,22 +39,11 @@ import java.util.List;
  */
 public class ModuleExportNode {
 
-    /**
-     * The internal name of the exported package.
-     */
-    public String packaze;
+    private String packaze;
 
-    /**
-     * The access flags (see {@link Opcodes}). Valid values are {@code
-     * ACC_SYNTHETIC} and {@code ACC_MANDATED}.
-     */
-    public int access;
+    private int access;
 
-    /**
-     * The list of modules that can access this exported package, specified with fully qualified names
-     * (using dots). May be <tt>null</tt>.
-     */
-    public List<String> modules;
+    private List<String> modules;
 
     /**
      * Constructs a new {@link ModuleExportNode}.
@@ -66,9 +55,9 @@ public class ModuleExportNode {
      *                qualified names (using dots).
      */
     public ModuleExportNode(final String packaze, final int access, final List<String> modules) {
-        this.packaze = packaze;
-        this.access = checkAccess(access);
-        this.modules = modules;
+        this.setPackaze(packaze);
+        this.setAccess(checkAccess(access));
+        this.setModules(modules);
     }
 
     private static int checkAccess(int access) {
@@ -89,6 +78,41 @@ public class ModuleExportNode {
      */
     public void accept(final ModuleVisitor moduleVisitor) {
         moduleVisitor.visitExport(
-                packaze, access, modules == null ? null : modules.toArray(new String[modules.size()]));
+                getPackaze(), getAccess(), getModules() == null ? null : getModules().toArray(new String[getModules().size()]));
+    }
+
+    /**
+     * The internal name of the exported package.
+     */
+    public String getPackaze() {
+        return packaze;
+    }
+
+    public void setPackaze(String packaze) {
+        this.packaze = packaze;
+    }
+
+    /**
+     * The access flags (see {@link Opcodes}). Valid values are {@code
+     * ACC_SYNTHETIC} and {@code ACC_MANDATED}.
+     */
+    public int getAccess() {
+        return access;
+    }
+
+    public void setAccess(int access) {
+        this.access = access;
+    }
+
+    /**
+     * The list of modules that can access this exported package, specified with fully qualified names
+     * (using dots). May be <tt>null</tt>.
+     */
+    public List<String> getModules() {
+        return modules;
+    }
+
+    public void setModules(List<String> modules) {
+        this.modules = modules;
     }
 }

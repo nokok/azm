@@ -87,11 +87,11 @@ public class SourceInterpreter extends Interpreter<SourceValue> implements Opcod
             size = 2;
             break;
         case LDC:
-            Object value = ((LdcInsnNode) insn).cst;
+            Object value = ((LdcInsnNode) insn).getCst();
             size = value instanceof Long || value instanceof Double ? 2 : 1;
             break;
         case GETSTATIC:
-            size = Type.getType(((FieldInsnNode) insn).desc).getSize();
+            size = Type.getType(((FieldInsnNode) insn).getDesc()).getSize();
             break;
         default:
             size = 1;
@@ -119,7 +119,7 @@ public class SourceInterpreter extends Interpreter<SourceValue> implements Opcod
             size = 2;
             break;
         case GETFIELD:
-            size = Type.getType(((FieldInsnNode) insn).desc).getSize();
+            size = Type.getType(((FieldInsnNode) insn).getDesc()).getSize();
             break;
         default:
             size = 1;
@@ -175,9 +175,9 @@ public class SourceInterpreter extends Interpreter<SourceValue> implements Opcod
         if (opcode == MULTIANEWARRAY) {
             size = 1;
         } else if (opcode == INVOKEDYNAMIC) {
-            size = Type.getReturnType(((InvokeDynamicInsnNode) insn).desc).getSize();
+            size = Type.getReturnType(((InvokeDynamicInsnNode) insn).getDesc()).getSize();
         } else {
-            size = Type.getReturnType(((MethodInsnNode) insn).desc).getSize();
+            size = Type.getReturnType(((MethodInsnNode) insn).getDesc()).getSize();
         }
         return new SourceValue(size, insn);
     }

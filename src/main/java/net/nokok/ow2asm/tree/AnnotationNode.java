@@ -41,20 +41,9 @@ import java.util.List;
  */
 public class AnnotationNode extends AnnotationVisitor {
 
-    /**
-     * The class descriptor of the annotation class.
-     */
-    public String desc;
+    private String desc;
 
-    /**
-     * The name value pairs of this annotation. Each name value pair is stored as two consecutive
-     * elements in the list. The name is a {@link String}, and the value may be a {@link Byte}, {@link
-     * Boolean}, {@link Character}, {@link Short}, {@link Integer}, {@link Long}, {@link Float},
-     * {@link Double}, {@link String} or {@link Type}, or a two elements String
-     * array (for enumeration values), an {@link AnnotationNode}, or a {@link List} of values of one
-     * of the preceding types. The list may be <tt>null</tt> if there is no name value pair.
-     */
-    public List<Object> values;
+    private List<Object> values;
 
     /**
      * Constructs a new {@link AnnotationNode}. <i>Subclasses must not use this constructor</i>.
@@ -79,7 +68,7 @@ public class AnnotationNode extends AnnotationVisitor {
      */
     public AnnotationNode(final int api, final String descriptor) {
         super(api);
-        this.desc = descriptor;
+        this.setDesc(descriptor);
     }
 
     /**
@@ -89,7 +78,7 @@ public class AnnotationNode extends AnnotationVisitor {
      */
     AnnotationNode(final List<Object> values) {
         super(Opcodes.ASM6);
-        this.values = values;
+        this.setValues(values);
     }
 
     // ------------------------------------------------------------------------
@@ -98,67 +87,67 @@ public class AnnotationNode extends AnnotationVisitor {
 
     @Override
     public void visit(final String name, final Object value) {
-        if (values == null) {
-            values = new ArrayList<Object>(this.desc != null ? 2 : 1);
+        if (getValues() == null) {
+            setValues(new ArrayList<Object>(this.getDesc() != null ? 2 : 1));
         }
-        if (this.desc != null) {
-            values.add(name);
+        if (this.getDesc() != null) {
+            getValues().add(name);
         }
         if (value instanceof byte[]) {
-            values.add(Util.asArrayList((byte[]) value));
+            getValues().add(Util.asArrayList((byte[]) value));
         } else if (value instanceof boolean[]) {
-            values.add(Util.asArrayList((boolean[]) value));
+            getValues().add(Util.asArrayList((boolean[]) value));
         } else if (value instanceof short[]) {
-            values.add(Util.asArrayList((short[]) value));
+            getValues().add(Util.asArrayList((short[]) value));
         } else if (value instanceof char[]) {
-            values.add(Util.asArrayList((char[]) value));
+            getValues().add(Util.asArrayList((char[]) value));
         } else if (value instanceof int[]) {
-            values.add(Util.asArrayList((int[]) value));
+            getValues().add(Util.asArrayList((int[]) value));
         } else if (value instanceof long[]) {
-            values.add(Util.asArrayList((long[]) value));
+            getValues().add(Util.asArrayList((long[]) value));
         } else if (value instanceof float[]) {
-            values.add(Util.asArrayList((float[]) value));
+            getValues().add(Util.asArrayList((float[]) value));
         } else if (value instanceof double[]) {
-            values.add(Util.asArrayList((double[]) value));
+            getValues().add(Util.asArrayList((double[]) value));
         } else {
-            values.add(value);
+            getValues().add(value);
         }
     }
 
     @Override
     public void visitEnum(final String name, final String descriptor, final String value) {
-        if (values == null) {
-            values = new ArrayList<Object>(this.desc != null ? 2 : 1);
+        if (getValues() == null) {
+            setValues(new ArrayList<Object>(this.getDesc() != null ? 2 : 1));
         }
-        if (this.desc != null) {
-            values.add(name);
+        if (this.getDesc() != null) {
+            getValues().add(name);
         }
-        values.add(new String[]{descriptor, value});
+        getValues().add(new String[]{descriptor, value});
     }
 
     @Override
     public AnnotationVisitor visitAnnotation(final String name, final String descriptor) {
-        if (values == null) {
-            values = new ArrayList<Object>(this.desc != null ? 2 : 1);
+        if (getValues() == null) {
+            setValues(new ArrayList<Object>(this.getDesc() != null ? 2 : 1));
         }
-        if (this.desc != null) {
-            values.add(name);
+        if (this.getDesc() != null) {
+            getValues().add(name);
         }
         AnnotationNode annotation = new AnnotationNode(descriptor);
-        values.add(annotation);
+        getValues().add(annotation);
         return annotation;
     }
 
     @Override
     public AnnotationVisitor visitArray(final String name) {
-        if (values == null) {
-            values = new ArrayList<Object>(this.desc != null ? 2 : 1);
+        if (getValues() == null) {
+            setValues(new ArrayList<Object>(this.getDesc() != null ? 2 : 1));
         }
-        if (this.desc != null) {
-            values.add(name);
+        if (this.getDesc() != null) {
+            getValues().add(name);
         }
         List<Object> array = new ArrayList<Object>();
-        values.add(array);
+        getValues().add(array);
         return new AnnotationNode(array);
     }
 
@@ -190,10 +179,10 @@ public class AnnotationNode extends AnnotationVisitor {
      */
     public void accept(final AnnotationVisitor annotationVisitor) {
         if (annotationVisitor != null) {
-            if (values != null) {
-                for (int i = 0, n = values.size(); i < n; i += 2) {
-                    String name = (String) values.get(i);
-                    Object value = values.get(i + 1);
+            if (getValues() != null) {
+                for (int i = 0, n = getValues().size(); i < n; i += 2) {
+                    String name = (String) getValues().get(i);
+                    Object value = getValues().get(i + 1);
                     accept(annotationVisitor, name, value);
                 }
             }
@@ -216,7 +205,7 @@ public class AnnotationNode extends AnnotationVisitor {
                 annotationVisitor.visitEnum(name, typeValue[0], typeValue[1]);
             } else if (value instanceof AnnotationNode) {
                 AnnotationNode annotationValue = (AnnotationNode) value;
-                annotationValue.accept(annotationVisitor.visitAnnotation(name, annotationValue.desc));
+                annotationValue.accept(annotationVisitor.visitAnnotation(name, annotationValue.getDesc()));
             } else if (value instanceof List) {
                 AnnotationVisitor arrayAnnotationVisitor = annotationVisitor.visitArray(name);
                 if (arrayAnnotationVisitor != null) {
@@ -230,5 +219,32 @@ public class AnnotationNode extends AnnotationVisitor {
                 annotationVisitor.visit(name, value);
             }
         }
+    }
+
+    /**
+     * The class descriptor of the annotation class.
+     */
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
+    /**
+     * The name value pairs of this annotation. Each name value pair is stored as two consecutive
+     * elements in the list. The name is a {@link String}, and the value may be a {@link Byte}, {@link
+     * Boolean}, {@link Character}, {@link Short}, {@link Integer}, {@link Long}, {@link Float},
+     * {@link Double}, {@link String} or {@link Type}, or a two elements String
+     * array (for enumeration values), an {@link AnnotationNode}, or a {@link List} of values of one
+     * of the preceding types. The list may be <tt>null</tt> if there is no name value pair.
+     */
+    public List<Object> getValues() {
+        return values;
+    }
+
+    public void setValues(List<Object> values) {
+        this.values = values;
     }
 }

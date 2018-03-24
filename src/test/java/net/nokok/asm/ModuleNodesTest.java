@@ -46,14 +46,14 @@ public class ModuleNodesTest {
         ModuleNode actualModule = actualClassNode.module;
         ModuleNode expectedModule = expectedClassNode.module;
 
-        assertEquals(expectedModule.access, actualModule.access);
-        assertEquals(expectedModule.mainClass, actualModule.mainClass);
-        assertEquals(expectedModule.packages, actualModule.packages);
-        assertIterableEquals(expectedModule.exports, actualModule.exports);
-        assertIterableEquals(expectedModule.opens, actualModule.opens);
-        assertIterableEquals(expectedModule.provides, actualModule.provides);
-        assertIterableEquals(expectedModule.requires, actualModule.requires);
-        assertIterableEquals(expectedModule.uses, actualModule.uses);
+        assertEquals(expectedModule.getAccess(), actualModule.getAccess());
+        assertEquals(expectedModule.getMainClass(), actualModule.getMainClass());
+        assertEquals(expectedModule.getPackages(), actualModule.getPackages());
+        assertIterableEquals(expectedModule.getExports(), actualModule.getExports());
+        assertIterableEquals(expectedModule.getOpens(), actualModule.getOpens());
+        assertIterableEquals(expectedModule.getProvides(), actualModule.getProvides());
+        assertIterableEquals(expectedModule.getRequires(), actualModule.getRequires());
+        assertIterableEquals(expectedModule.getUses(), actualModule.getUses());
 
 
     }

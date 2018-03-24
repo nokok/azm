@@ -49,26 +49,11 @@ import java.util.Map;
  */
 public class FrameNode extends AbstractInsnNode {
 
-    /**
-     * The type of this frame. Must be {@link Opcodes#F_NEW} for expanded frames, or {@link
-     * Opcodes#F_FULL}, {@link Opcodes#F_APPEND}, {@link Opcodes#F_CHOP}, {@link Opcodes#F_SAME} or
-     * {@link Opcodes#F_APPEND}, {@link Opcodes#F_SAME1} for compressed frames.
-     */
-    public int type;
+    private int type;
 
-    /**
-     * The types of the local variables of this stack map frame. Elements of this list can be Integer,
-     * String or LabelNode objects (for primitive, reference and uninitialized types respectively -
-     * see {@link MethodVisitor}).
-     */
-    public List<Object> local;
+    private List<Object> local;
 
-    /**
-     * The types of the operand stack elements of this stack map frame. Elements of this list can be
-     * Integer, String or LabelNode objects (for primitive, reference and uninitialized types
-     * respectively - see {@link MethodVisitor}).
-     */
-    public List<Object> stack;
+    private List<Object> stack;
 
     private FrameNode() {
         super(-1);
@@ -96,29 +81,34 @@ public class FrameNode extends AbstractInsnNode {
             final int nStack,
             final Object[] stack) {
         super(-1);
-        this.type = type;
+        this.setType(type);
         switch (type) {
         case Opcodes.F_NEW:
         case Opcodes.F_FULL:
-            this.local = Util.asArrayList(nLocal, local);
-            this.stack = Util.asArrayList(nStack, stack);
+            this.setLocal(Util.asArrayList(nLocal, local));
+            this.setStack(Util.asArrayList(nStack, stack));
             break;
         case Opcodes.F_APPEND:
-            this.local = Util.asArrayList(nLocal, local);
+            this.setLocal(Util.asArrayList(nLocal, local));
             break;
         case Opcodes.F_CHOP:
-            this.local = Util.asArrayList(nLocal);
+            this.setLocal(Util.asArrayList(nLocal));
             break;
         case Opcodes.F_SAME:
             break;
         case Opcodes.F_SAME1:
-            this.stack = Util.asArrayList(1, stack);
+            this.setStack(Util.asArrayList(1, stack));
             break;
         default:
             throw new IllegalArgumentException();
         }
     }
 
+    /**
+     * The type of this frame. Must be {@link Opcodes#F_NEW} for expanded frames, or {@link
+     * Opcodes#F_FULL}, {@link Opcodes#F_APPEND}, {@link Opcodes#F_CHOP}, {@link Opcodes#F_SAME} or
+     * {@link Opcodes#F_APPEND}, {@link Opcodes#F_SAME1} for compressed frames.
+     */
     @Override
     public int getType() {
         return FRAME;
@@ -126,22 +116,22 @@ public class FrameNode extends AbstractInsnNode {
 
     @Override
     public void accept(final MethodVisitor methodVisitor) {
-        switch (type) {
+        switch (getType()) {
         case Opcodes.F_NEW:
         case Opcodes.F_FULL:
-            methodVisitor.visitFrame(type, local.size(), asArray(local), stack.size(), asArray(stack));
+            methodVisitor.visitFrame(getType(), getLocal().size(), asArray(getLocal()), getStack().size(), asArray(getStack()));
             break;
         case Opcodes.F_APPEND:
-            methodVisitor.visitFrame(type, local.size(), asArray(local), 0, null);
+            methodVisitor.visitFrame(getType(), getLocal().size(), asArray(getLocal()), 0, null);
             break;
         case Opcodes.F_CHOP:
-            methodVisitor.visitFrame(type, local.size(), null, 0, null);
+            methodVisitor.visitFrame(getType(), getLocal().size(), null, 0, null);
             break;
         case Opcodes.F_SAME:
-            methodVisitor.visitFrame(type, 0, null, 0, null);
+            methodVisitor.visitFrame(getType(), 0, null, 0, null);
             break;
         case Opcodes.F_SAME1:
-            methodVisitor.visitFrame(type, 0, null, 1, asArray(stack));
+            methodVisitor.visitFrame(getType(), 0, null, 1, asArray(getStack()));
             break;
         default:
             throw new IllegalArgumentException();
@@ -151,25 +141,25 @@ public class FrameNode extends AbstractInsnNode {
     @Override
     public AbstractInsnNode clone(final Map<LabelNode, LabelNode> clonedLabels) {
         FrameNode clone = new FrameNode();
-        clone.type = type;
-        if (local != null) {
-            clone.local = new ArrayList<Object>();
-            for (int i = 0, n = local.size(); i < n; ++i) {
-                Object localElement = local.get(i);
+        clone.setType(getType());
+        if (getLocal() != null) {
+            clone.setLocal(new ArrayList<Object>());
+            for (int i = 0, n = getLocal().size(); i < n; ++i) {
+                Object localElement = getLocal().get(i);
                 if (localElement instanceof LabelNode) {
                     localElement = clonedLabels.get(localElement);
                 }
-                clone.local.add(localElement);
+                clone.getLocal().add(localElement);
             }
         }
-        if (stack != null) {
-            clone.stack = new ArrayList<Object>();
-            for (int i = 0, n = stack.size(); i < n; ++i) {
-                Object stackElement = stack.get(i);
+        if (getStack() != null) {
+            clone.setStack(new ArrayList<Object>());
+            for (int i = 0, n = getStack().size(); i < n; ++i) {
+                Object stackElement = getStack().get(i);
                 if (stackElement instanceof LabelNode) {
                     stackElement = clonedLabels.get(stackElement);
                 }
-                clone.stack.add(stackElement);
+                clone.getStack().add(stackElement);
             }
         }
         return clone;
@@ -185,5 +175,35 @@ public class FrameNode extends AbstractInsnNode {
             array[i] = o;
         }
         return array;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
+    /**
+     * The types of the local variables of this stack map frame. Elements of this list can be Integer,
+     * String or LabelNode objects (for primitive, reference and uninitialized types respectively -
+     * see {@link MethodVisitor}).
+     */
+    public List<Object> getLocal() {
+        return local;
+    }
+
+    public void setLocal(List<Object> local) {
+        this.local = local;
+    }
+
+    /**
+     * The types of the operand stack elements of this stack map frame. Elements of this list can be
+     * Integer, String or LabelNode objects (for primitive, reference and uninitialized types
+     * respectively - see {@link MethodVisitor}).
+     */
+    public List<Object> getStack() {
+        return stack;
+    }
+
+    public void setStack(List<Object> stack) {
+        this.stack = stack;
     }
 }

@@ -41,25 +41,13 @@ import java.util.Map;
  */
 public class InvokeDynamicInsnNode extends AbstractInsnNode {
 
-    /**
-     * The method's name.
-     */
-    public String name;
+    private String name;
 
-    /**
-     * The method's descriptor (see {@link Type}).
-     */
-    public String desc;
+    private String desc;
 
-    /**
-     * The bootstrap method.
-     */
-    public Handle bsm;
+    private Handle bsm;
 
-    /**
-     * The bootstrap method constant arguments.
-     */
-    public Object[] bsmArgs;
+    private Object[] bsmArgs;
 
     /**
      * Constructs a new {@link InvokeDynamicInsnNode}.
@@ -78,10 +66,10 @@ public class InvokeDynamicInsnNode extends AbstractInsnNode {
             final Handle bootstrapMethodHandle,
             final Object... bootstrapMethodArguments) {
         super(Opcodes.INVOKEDYNAMIC);
-        this.name = name;
-        this.desc = descriptor;
-        this.bsm = bootstrapMethodHandle;
-        this.bsmArgs = bootstrapMethodArguments;
+        this.setName(name);
+        this.setDesc(descriptor);
+        this.setBsm(bootstrapMethodHandle);
+        this.setBsmArgs(bootstrapMethodArguments);
     }
 
     @Override
@@ -91,12 +79,56 @@ public class InvokeDynamicInsnNode extends AbstractInsnNode {
 
     @Override
     public void accept(final MethodVisitor methodVisitor) {
-        methodVisitor.visitInvokeDynamicInsn(name, desc, bsm, bsmArgs);
+        methodVisitor.visitInvokeDynamicInsn(getName(), getDesc(), getBsm(), getBsmArgs());
         acceptAnnotations(methodVisitor);
     }
 
     @Override
     public AbstractInsnNode clone(final Map<LabelNode, LabelNode> clonedLabels) {
-        return new InvokeDynamicInsnNode(name, desc, bsm, bsmArgs).cloneAnnotations(this);
+        return new InvokeDynamicInsnNode(getName(), getDesc(), getBsm(), getBsmArgs()).cloneAnnotations(this);
+    }
+
+    /**
+     * The method's name.
+     */
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * The method's descriptor (see {@link Type}).
+     */
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
+    /**
+     * The bootstrap method.
+     */
+    public Handle getBsm() {
+        return bsm;
+    }
+
+    public void setBsm(Handle bsm) {
+        this.bsm = bsm;
+    }
+
+    /**
+     * The bootstrap method constant arguments.
+     */
+    public Object[] getBsmArgs() {
+        return bsmArgs;
+    }
+
+    public void setBsmArgs(Object[] bsmArgs) {
+        this.bsmArgs = bsmArgs;
     }
 }

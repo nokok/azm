@@ -45,7 +45,7 @@ public class TypeInsnNode extends AbstractInsnNode {
      * The operand of this instruction. This operand is an internal name (see {@link
      * Type}).
      */
-    public String desc;
+    private String desc;
 
     /**
      * Constructs a new {@link TypeInsnNode}.
@@ -68,6 +68,10 @@ public class TypeInsnNode extends AbstractInsnNode {
      */
     public void setOpcode(final int opcode) {
         this.opcode = checkOpcode(opcode);
+    }
+
+    public String getDesc() {
+        return desc;
     }
 
     private static int checkOpcode(int opcode) {

@@ -132,7 +132,7 @@ public class BasicInterpreter extends Interpreter<BasicValue> implements Opcodes
         case SIPUSH:
             return BasicValue.INT_VALUE;
         case LDC:
-            Object value = ((LdcInsnNode) insn).cst;
+            Object value = ((LdcInsnNode) insn).getCst();
             if (value instanceof Integer) {
                 return BasicValue.INT_VALUE;
             } else if (value instanceof Float) {
@@ -160,7 +160,7 @@ public class BasicInterpreter extends Interpreter<BasicValue> implements Opcodes
         case JSR:
             return BasicValue.RETURNADDRESS_VALUE;
         case GETSTATIC:
-            return newValue(Type.getType(((FieldInsnNode) insn).desc));
+            return newValue(Type.getType(((FieldInsnNode) insn).getDesc()));
         case NEW:
             return newValue(Type.getObjectType(((TypeInsnNode) insn).desc));
         default:
@@ -218,9 +218,9 @@ public class BasicInterpreter extends Interpreter<BasicValue> implements Opcodes
         case PUTSTATIC:
             return null;
         case GETFIELD:
-            return newValue(Type.getType(((FieldInsnNode) insn).desc));
+            return newValue(Type.getType(((FieldInsnNode) insn).getDesc()));
         case NEWARRAY:
-            switch (((IntInsnNode) insn).operand) {
+            switch (((IntInsnNode) insn).getOperand()) {
             case T_BOOLEAN:
                 return newValue(Type.getType("[Z"));
             case T_CHAR:
@@ -348,11 +348,11 @@ public class BasicInterpreter extends Interpreter<BasicValue> implements Opcodes
             throws AnalyzerException {
         int opcode = insn.getOpcode();
         if (opcode == MULTIANEWARRAY) {
-            return newValue(Type.getType(((MultiANewArrayInsnNode) insn).desc));
+            return newValue(Type.getType(((MultiANewArrayInsnNode) insn).getDesc()));
         } else if (opcode == INVOKEDYNAMIC) {
-            return newValue(Type.getReturnType(((InvokeDynamicInsnNode) insn).desc));
+            return newValue(Type.getReturnType(((InvokeDynamicInsnNode) insn).getDesc()));
         } else {
-            return newValue(Type.getReturnType(((MethodInsnNode) insn).desc));
+            return newValue(Type.getReturnType(((MethodInsnNode) insn).getDesc()));
         }
     }
 

@@ -38,15 +38,9 @@ import java.util.List;
  */
 public class ModuleProvideNode {
 
-    /**
-     * The internal name of the service.
-     */
-    public String service;
+    private String service;
 
-    /**
-     * The internal names of the implementations of the service (there is at least one provider).
-     */
-    public List<String> providers;
+    private List<String> providers;
 
     /**
      * Constructs a new {@link ModuleProvideNode}.
@@ -56,8 +50,8 @@ public class ModuleProvideNode {
      *                  one provider).
      */
     public ModuleProvideNode(final String service, final List<String> providers) {
-        this.service = service;
-        this.providers = providers;
+        this.setService(service);
+        this.setProviders(providers);
     }
 
     /**
@@ -66,6 +60,28 @@ public class ModuleProvideNode {
      * @param moduleVisitor a module visitor.
      */
     public void accept(final ModuleVisitor moduleVisitor) {
-        moduleVisitor.visitProvide(service, providers.toArray(new String[providers.size()]));
+        moduleVisitor.visitProvide(getService(), getProviders().toArray(new String[getProviders().size()]));
+    }
+
+    /**
+     * The internal name of the service.
+     */
+    public String getService() {
+        return service;
+    }
+
+    public void setService(String service) {
+        this.service = service;
+    }
+
+    /**
+     * The internal names of the implementations of the service (there is at least one provider).
+     */
+    public List<String> getProviders() {
+        return providers;
+    }
+
+    public void setProviders(List<String> providers) {
+        this.providers = providers;
     }
 }

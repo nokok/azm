@@ -242,13 +242,13 @@ public class FieldNode extends FieldVisitor {
         if (visibleAnnotations != null) {
             for (int i = 0, n = visibleAnnotations.size(); i < n; ++i) {
                 AnnotationNode annotation = visibleAnnotations.get(i);
-                annotation.accept(fieldVisitor.visitAnnotation(annotation.desc, true));
+                annotation.accept(fieldVisitor.visitAnnotation(annotation.getDesc(), true));
             }
         }
         if (invisibleAnnotations != null) {
             for (int i = 0, n = invisibleAnnotations.size(); i < n; ++i) {
                 AnnotationNode annotation = invisibleAnnotations.get(i);
-                annotation.accept(fieldVisitor.visitAnnotation(annotation.desc, false));
+                annotation.accept(fieldVisitor.visitAnnotation(annotation.getDesc(), false));
             }
         }
         if (visibleTypeAnnotations != null) {
@@ -256,7 +256,7 @@ public class FieldNode extends FieldVisitor {
                 TypeAnnotationNode typeAnnotation = visibleTypeAnnotations.get(i);
                 typeAnnotation.accept(
                         fieldVisitor.visitTypeAnnotation(
-                                typeAnnotation.typeRef, typeAnnotation.typePath, typeAnnotation.desc, true));
+                                typeAnnotation.getTypeRef(), typeAnnotation.getTypePath(), typeAnnotation.getDesc(), true));
             }
         }
         if (invisibleTypeAnnotations != null) {
@@ -264,7 +264,7 @@ public class FieldNode extends FieldVisitor {
                 TypeAnnotationNode typeAnnotation = invisibleTypeAnnotations.get(i);
                 typeAnnotation.accept(
                         fieldVisitor.visitTypeAnnotation(
-                                typeAnnotation.typeRef, typeAnnotation.typePath, typeAnnotation.desc, false));
+                                typeAnnotation.getTypeRef(), typeAnnotation.getTypePath(), typeAnnotation.getDesc(), false));
             }
         }
         // Visit the non standard attributes.

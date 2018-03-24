@@ -39,15 +39,9 @@ import java.util.Map;
  */
 public class IincInsnNode extends AbstractInsnNode {
 
-    /**
-     * Index of the local variable to be incremented.
-     */
-    public int var;
+    private int var;
 
-    /**
-     * Amount to increment the local variable by.
-     */
-    public int incr;
+    private int incr;
 
     /**
      * Constructs a new {@link IincInsnNode}.
@@ -57,8 +51,8 @@ public class IincInsnNode extends AbstractInsnNode {
      */
     public IincInsnNode(final int var, final int incr) {
         super(Opcodes.IINC);
-        this.var = var;
-        this.incr = incr;
+        this.setVar(var);
+        this.setIncr(incr);
     }
 
     @Override
@@ -68,12 +62,34 @@ public class IincInsnNode extends AbstractInsnNode {
 
     @Override
     public void accept(final MethodVisitor methodVisitor) {
-        methodVisitor.visitIincInsn(var, incr);
+        methodVisitor.visitIincInsn(getVar(), getIncr());
         acceptAnnotations(methodVisitor);
     }
 
     @Override
     public AbstractInsnNode clone(final Map<LabelNode, LabelNode> clonedLabels) {
-        return new IincInsnNode(var, incr).cloneAnnotations(this);
+        return new IincInsnNode(getVar(), getIncr()).cloneAnnotations(this);
+    }
+
+    /**
+     * Index of the local variable to be incremented.
+     */
+    public int getVar() {
+        return var;
+    }
+
+    public void setVar(int var) {
+        this.var = var;
+    }
+
+    /**
+     * Amount to increment the local variable by.
+     */
+    public int getIncr() {
+        return incr;
+    }
+
+    public void setIncr(int incr) {
+        this.incr = incr;
     }
 }

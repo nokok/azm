@@ -529,15 +529,15 @@ public class MethodNode extends MethodVisitor {
         TryCatchBlockNode tryCatchBlock = tryCatchBlocks.get((typeRef & 0x00FFFF00) >> 8);
         TypeAnnotationNode typeAnnotation = new TypeAnnotationNode(typeRef, typePath, descriptor);
         if (visible) {
-            if (tryCatchBlock.visibleTypeAnnotations == null) {
-                tryCatchBlock.visibleTypeAnnotations = new ArrayList<TypeAnnotationNode>(1);
+            if (tryCatchBlock.getVisibleTypeAnnotations() == null) {
+                tryCatchBlock.setVisibleTypeAnnotations(new ArrayList<TypeAnnotationNode>(1));
             }
-            tryCatchBlock.visibleTypeAnnotations.add(typeAnnotation);
+            tryCatchBlock.getVisibleTypeAnnotations().add(typeAnnotation);
         } else {
-            if (tryCatchBlock.invisibleTypeAnnotations == null) {
-                tryCatchBlock.invisibleTypeAnnotations = new ArrayList<TypeAnnotationNode>(1);
+            if (tryCatchBlock.getInvisibleTypeAnnotations() == null) {
+                tryCatchBlock.setInvisibleTypeAnnotations(new ArrayList<TypeAnnotationNode>(1));
             }
-            tryCatchBlock.invisibleTypeAnnotations.add(typeAnnotation);
+            tryCatchBlock.getInvisibleTypeAnnotations().add(typeAnnotation);
         }
         return typeAnnotation;
     }
@@ -658,12 +658,12 @@ public class MethodNode extends MethodVisitor {
             if (tryCatchBlocks != null) {
                 for (int i = tryCatchBlocks.size() - 1; i >= 0; --i) {
                     TryCatchBlockNode tryCatchBlock = tryCatchBlocks.get(i);
-                    if (tryCatchBlock.visibleTypeAnnotations != null
-                            && !tryCatchBlock.visibleTypeAnnotations.isEmpty()) {
+                    if (tryCatchBlock.getVisibleTypeAnnotations() != null
+                            && !tryCatchBlock.getVisibleTypeAnnotations().isEmpty()) {
                         throw new UnsupportedClassVersionException();
                     }
-                    if (tryCatchBlock.invisibleTypeAnnotations != null
-                            && !tryCatchBlock.invisibleTypeAnnotations.isEmpty()) {
+                    if (tryCatchBlock.getInvisibleTypeAnnotations() != null
+                            && !tryCatchBlock.getInvisibleTypeAnnotations().isEmpty()) {
                         throw new UnsupportedClassVersionException();
                     }
                 }
@@ -677,12 +677,12 @@ public class MethodNode extends MethodVisitor {
                     throw new UnsupportedClassVersionException();
                 }
                 if (insn instanceof MethodInsnNode) {
-                    boolean isInterface = ((MethodInsnNode) insn).itf;
+                    boolean isInterface = ((MethodInsnNode) insn).isItf();
                     if (isInterface != (insn.opcode == Opcodes.INVOKEINTERFACE)) {
                         throw new UnsupportedClassVersionException();
                     }
                 } else if (insn instanceof LdcInsnNode) {
-                    Object value = ((LdcInsnNode) insn).cst;
+                    Object value = ((LdcInsnNode) insn).getCst();
                     if (value instanceof Handle
                             || (value instanceof Type && ((Type) value).getSort() == Type.METHOD)) {
                         throw new UnsupportedClassVersionException();
@@ -737,13 +737,13 @@ public class MethodNode extends MethodVisitor {
         if (visibleAnnotations != null) {
             for (int i = 0, n = visibleAnnotations.size(); i < n; ++i) {
                 AnnotationNode annotation = visibleAnnotations.get(i);
-                annotation.accept(methodVisitor.visitAnnotation(annotation.desc, true));
+                annotation.accept(methodVisitor.visitAnnotation(annotation.getDesc(), true));
             }
         }
         if (invisibleAnnotations != null) {
             for (int i = 0, n = invisibleAnnotations.size(); i < n; ++i) {
                 AnnotationNode annotation = invisibleAnnotations.get(i);
-                annotation.accept(methodVisitor.visitAnnotation(annotation.desc, false));
+                annotation.accept(methodVisitor.visitAnnotation(annotation.getDesc(), false));
             }
         }
         if (visibleTypeAnnotations != null) {
@@ -751,7 +751,7 @@ public class MethodNode extends MethodVisitor {
                 TypeAnnotationNode typeAnnotation = visibleTypeAnnotations.get(i);
                 typeAnnotation.accept(
                         methodVisitor.visitTypeAnnotation(
-                                typeAnnotation.typeRef, typeAnnotation.typePath, typeAnnotation.desc, true));
+                                typeAnnotation.getTypeRef(), typeAnnotation.getTypePath(), typeAnnotation.getDesc(), true));
             }
         }
         if (invisibleTypeAnnotations != null) {
@@ -759,7 +759,7 @@ public class MethodNode extends MethodVisitor {
                 TypeAnnotationNode typeAnnotation = invisibleTypeAnnotations.get(i);
                 typeAnnotation.accept(
                         methodVisitor.visitTypeAnnotation(
-                                typeAnnotation.typeRef, typeAnnotation.typePath, typeAnnotation.desc, false));
+                                typeAnnotation.getTypeRef(), typeAnnotation.getTypePath(), typeAnnotation.getDesc(), false));
             }
         }
         if (visibleAnnotableParameterCount > 0) {
@@ -773,7 +773,7 @@ public class MethodNode extends MethodVisitor {
                 }
                 for (int j = 0, m = parameterAnnotations.size(); j < m; ++j) {
                     AnnotationNode annotation = parameterAnnotations.get(j);
-                    annotation.accept(methodVisitor.visitParameterAnnotation(i, annotation.desc, true));
+                    annotation.accept(methodVisitor.visitParameterAnnotation(i, annotation.getDesc(), true));
                 }
             }
         }
@@ -788,7 +788,7 @@ public class MethodNode extends MethodVisitor {
                 }
                 for (int j = 0, m = parameterAnnotations.size(); j < m; ++j) {
                     AnnotationNode annotation = parameterAnnotations.get(j);
-                    annotation.accept(methodVisitor.visitParameterAnnotation(i, annotation.desc, false));
+                    annotation.accept(methodVisitor.visitParameterAnnotation(i, annotation.getDesc(), false));
                 }
             }
         }

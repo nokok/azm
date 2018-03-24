@@ -40,12 +40,7 @@ import java.util.Map;
  */
 public class LdcInsnNode extends AbstractInsnNode {
 
-    /**
-     * The constant to be loaded on the stack. This parameter must be a non null {@link Integer}, a
-     * {@link Float}, a {@link Long}, a {@link Double}, a {@link String} or a {@link
-     * Type}.
-     */
-    public Object cst;
+    private Object cst;
 
     /**
      * Constructs a new {@link LdcInsnNode}.
@@ -55,7 +50,7 @@ public class LdcInsnNode extends AbstractInsnNode {
      */
     public LdcInsnNode(final Object value) {
         super(Opcodes.LDC);
-        this.cst = value;
+        this.setCst(value);
     }
 
     @Override
@@ -65,12 +60,25 @@ public class LdcInsnNode extends AbstractInsnNode {
 
     @Override
     public void accept(final MethodVisitor methodVisitor) {
-        methodVisitor.visitLdcInsn(cst);
+        methodVisitor.visitLdcInsn(getCst());
         acceptAnnotations(methodVisitor);
     }
 
     @Override
     public AbstractInsnNode clone(final Map<LabelNode, LabelNode> clonedLabels) {
-        return new LdcInsnNode(cst).cloneAnnotations(this);
+        return new LdcInsnNode(getCst()).cloneAnnotations(this);
+    }
+
+    /**
+     * The constant to be loaded on the stack. This parameter must be a non null {@link Integer}, a
+     * {@link Float}, a {@link Long}, a {@link Double}, a {@link String} or a {@link
+     * Type}.
+     */
+    public Object getCst() {
+        return cst;
+    }
+
+    public void setCst(Object cst) {
+        this.cst = cst;
     }
 }

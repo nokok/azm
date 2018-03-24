@@ -39,11 +39,7 @@ import java.util.Map;
  */
 public class JumpInsnNode extends AbstractInsnNode {
 
-    /**
-     * The operand of this instruction. This operand is a label that designates the instruction to
-     * which this instruction may jump.
-     */
-    public LabelNode label;
+    private LabelNode label;
 
     /**
      * Constructs a new {@link JumpInsnNode}.
@@ -56,7 +52,7 @@ public class JumpInsnNode extends AbstractInsnNode {
      */
     public JumpInsnNode(final int opcode, final LabelNode label) {
         super(opcode);
-        this.label = label;
+        this.setLabel(label);
     }
 
     /**
@@ -77,12 +73,24 @@ public class JumpInsnNode extends AbstractInsnNode {
 
     @Override
     public void accept(final MethodVisitor methodVisitor) {
-        methodVisitor.visitJumpInsn(opcode, label.getLabel());
+        methodVisitor.visitJumpInsn(opcode, getLabel().getLabel());
         acceptAnnotations(methodVisitor);
     }
 
     @Override
     public AbstractInsnNode clone(final Map<LabelNode, LabelNode> clonedLabels) {
-        return new JumpInsnNode(opcode, clone(label, clonedLabels)).cloneAnnotations(this);
+        return new JumpInsnNode(opcode, clone(getLabel(), clonedLabels)).cloneAnnotations(this);
+    }
+
+    /**
+     * The operand of this instruction. This operand is a label that designates the instruction to
+     * which this instruction may jump.
+     */
+    public LabelNode getLabel() {
+        return label;
+    }
+
+    public void setLabel(LabelNode label) {
+        this.label = label;
     }
 }

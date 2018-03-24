@@ -43,7 +43,7 @@ public class VarInsnNode extends AbstractInsnNode {
     /**
      * The operand of this instruction. This operand is the index of a local variable.
      */
-    public int var;
+    private int var;
 
     /**
      * Constructs a new {@link VarInsnNode}.
@@ -66,6 +66,10 @@ public class VarInsnNode extends AbstractInsnNode {
      */
     public void setOpcode(final int opcode) {
         this.opcode = checkOpcode(opcode);
+    }
+
+    public int getVar() {
+        return var;
     }
 
     private static int checkOpcode(int opcode) {

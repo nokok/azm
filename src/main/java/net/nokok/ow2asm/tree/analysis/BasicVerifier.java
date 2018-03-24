@@ -154,7 +154,7 @@ public class BasicVerifier extends BasicInterpreter {
             expected = BasicValue.DOUBLE_VALUE;
             break;
         case GETFIELD:
-            expected = newValue(Type.getObjectType(((FieldInsnNode) insn).owner));
+            expected = newValue(Type.getObjectType(((FieldInsnNode) insn).getOwner()));
             break;
         case ARRAYLENGTH:
             if (!isArrayValue(value)) {
@@ -174,7 +174,7 @@ public class BasicVerifier extends BasicInterpreter {
             }
             return super.unaryOperation(insn, value);
         case PUTSTATIC:
-            expected = newValue(Type.getType(((FieldInsnNode) insn).desc));
+            expected = newValue(Type.getType(((FieldInsnNode) insn).getDesc()));
             break;
         default:
             throw new AssertionError();
@@ -293,8 +293,8 @@ public class BasicVerifier extends BasicInterpreter {
             break;
         case PUTFIELD:
             FieldInsnNode fieldInsn = (FieldInsnNode) insn;
-            expected1 = newValue(Type.getObjectType(fieldInsn.owner));
-            expected2 = newValue(Type.getType(fieldInsn.desc));
+            expected1 = newValue(Type.getObjectType(fieldInsn.getOwner()));
+            expected2 = newValue(Type.getType(fieldInsn.getDesc()));
             break;
         default:
             throw new AssertionError();
@@ -386,15 +386,15 @@ public class BasicVerifier extends BasicInterpreter {
             int i = 0;
             int j = 0;
             if (opcode != INVOKESTATIC && opcode != INVOKEDYNAMIC) {
-                Type owner = Type.getObjectType(((MethodInsnNode) insn).owner);
+                Type owner = Type.getObjectType(((MethodInsnNode) insn).getOwner());
                 if (!isSubTypeOf(values.get(i++), newValue(owner))) {
                     throw new AnalyzerException(insn, "Method owner", newValue(owner), values.get(0));
                 }
             }
             String methodDescriptor =
                     (opcode == INVOKEDYNAMIC)
-                            ? ((InvokeDynamicInsnNode) insn).desc
-                            : ((MethodInsnNode) insn).desc;
+                            ? ((InvokeDynamicInsnNode) insn).getDesc()
+                            : ((MethodInsnNode) insn).getDesc();
             Type[] args = Type.getArgumentTypes(methodDescriptor);
             while (i < values.size()) {
                 BasicValue expected = newValue(args[j++]);

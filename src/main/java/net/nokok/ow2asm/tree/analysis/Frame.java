@@ -494,7 +494,7 @@ public class Frame<V extends Value> {
             push(interpreter.unaryOperation(insn, pop()));
             break;
         case Opcodes.IINC:
-            var = ((IincInsnNode) insn).var;
+            var = ((IincInsnNode) insn).getVar();
             setLocal(var, interpreter.unaryOperation(insn, getLocal(var)));
             break;
         case Opcodes.I2L:
@@ -574,7 +574,7 @@ public class Frame<V extends Value> {
         case Opcodes.INVOKESTATIC:
         case Opcodes.INVOKEINTERFACE: {
             List<V> valueList = new ArrayList<V>();
-            String methodDescriptor = ((MethodInsnNode) insn).desc;
+            String methodDescriptor = ((MethodInsnNode) insn).getDesc();
             for (int i = Type.getArgumentTypes(methodDescriptor).length; i > 0; --i) {
                 valueList.add(0, pop());
             }
@@ -590,7 +590,7 @@ public class Frame<V extends Value> {
         }
         case Opcodes.INVOKEDYNAMIC: {
             List<V> valueList = new ArrayList<V>();
-            String methodDesccriptor = ((InvokeDynamicInsnNode) insn).desc;
+            String methodDesccriptor = ((InvokeDynamicInsnNode) insn).getDesc();
             for (int i = Type.getArgumentTypes(methodDesccriptor).length; i > 0; --i) {
                 valueList.add(0, pop());
             }
@@ -622,7 +622,7 @@ public class Frame<V extends Value> {
             break;
         case Opcodes.MULTIANEWARRAY:
             List<V> valueList = new ArrayList<V>();
-            for (int i = ((MultiANewArrayInsnNode) insn).dims; i > 0; --i) {
+            for (int i = ((MultiANewArrayInsnNode) insn).getDims(); i > 0; --i) {
                 valueList.add(0, pop());
             }
             push(interpreter.naryOperation(insn, valueList));

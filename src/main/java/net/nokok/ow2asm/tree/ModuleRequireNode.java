@@ -37,21 +37,11 @@ import net.nokok.ow2asm.Opcodes;
  */
 public class ModuleRequireNode {
 
-    /**
-     * The fully qualified name (using dots) of the dependence.
-     */
-    public String module;
+    private String module;
 
-    /**
-     * The access flag of the dependence among {@code ACC_TRANSITIVE}, {@code ACC_STATIC_PHASE},
-     * {@code ACC_SYNTHETIC} and {@code ACC_MANDATED}.
-     */
-    public int access;
+    private int access;
 
-    /**
-     * The module version at compile time, or <tt>null</tt>.
-     */
-    public String version;
+    private String version;
 
     /**
      * Constructs a new {@link ModuleRequireNode}.
@@ -62,9 +52,9 @@ public class ModuleRequireNode {
      * @param version the module version at compile time, or <tt>null</tt>.
      */
     public ModuleRequireNode(final String module, final int access, final String version) {
-        this.module = module;
-        this.access = checkAccess(access);
-        this.version = version;
+        this.setModule(module);
+        this.setAccess(checkAccess(access));
+        this.setVersion(version);
     }
 
     private static int checkAccess(int access) {
@@ -86,6 +76,40 @@ public class ModuleRequireNode {
      * @param moduleVisitor a module visitor.
      */
     public void accept(final ModuleVisitor moduleVisitor) {
-        moduleVisitor.visitRequire(module, access, version);
+        moduleVisitor.visitRequire(getModule(), getAccess(), getVersion());
+    }
+
+    /**
+     * The fully qualified name (using dots) of the dependence.
+     */
+    public String getModule() {
+        return module;
+    }
+
+    public void setModule(String module) {
+        this.module = module;
+    }
+
+    /**
+     * The access flag of the dependence among {@code ACC_TRANSITIVE}, {@code ACC_STATIC_PHASE},
+     * {@code ACC_SYNTHETIC} and {@code ACC_MANDATED}.
+     */
+    public int getAccess() {
+        return access;
+    }
+
+    public void setAccess(int access) {
+        this.access = access;
+    }
+
+    /**
+     * The module version at compile time, or <tt>null</tt>.
+     */
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
     }
 }

@@ -38,17 +38,9 @@ import net.nokok.ow2asm.TypeReference;
  */
 public class TypeAnnotationNode extends AnnotationNode {
 
-    /**
-     * A reference to the annotated type. See {@link TypeReference}.
-     */
-    public int typeRef;
+    private int typeRef;
 
-    /**
-     * The path to the annotated type argument, wildcard bound, array element type, or static outer
-     * type within the referenced type. May be <tt>null</tt> if the annotation targets 'typeRef' as a
-     * whole.
-     */
-    public TypePath typePath;
+    private TypePath typePath;
 
     /**
      * Constructs a new {@link AnnotationNode}. <i>Subclasses must not use this constructor</i>.
@@ -82,7 +74,31 @@ public class TypeAnnotationNode extends AnnotationNode {
     public TypeAnnotationNode(
             final int api, final int typeRef, final TypePath typePath, final String descriptor) {
         super(api, descriptor);
+        this.setTypeRef(typeRef);
+        this.setTypePath(typePath);
+    }
+
+    /**
+     * A reference to the annotated type. See {@link TypeReference}.
+     */
+    public int getTypeRef() {
+        return typeRef;
+    }
+
+    public void setTypeRef(int typeRef) {
         this.typeRef = typeRef;
+    }
+
+    /**
+     * The path to the annotated type argument, wildcard bound, array element type, or static outer
+     * type within the referenced type. May be <tt>null</tt> if the annotation targets 'typeRef' as a
+     * whole.
+     */
+    public TypePath getTypePath() {
+        return typePath;
+    }
+
+    public void setTypePath(TypePath typePath) {
         this.typePath = typePath;
     }
 }

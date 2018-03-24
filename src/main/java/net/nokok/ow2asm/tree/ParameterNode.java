@@ -37,16 +37,9 @@ import net.nokok.ow2asm.Opcodes;
  */
 public class ParameterNode {
 
-    /**
-     * The parameter's name.
-     */
-    public String name;
+    private String name;
 
-    /**
-     * The parameter's access flags (see {@link Opcodes}). Valid values are
-     * <tt>ACC_FINAL</tt>, <tt>ACC_SYNTHETIC</tt> and <tt>ACC_MANDATED</tt>.
-     */
-    public int access;
+    private int access;
 
     /**
      * Constructs a new {@link ParameterNode}.
@@ -57,8 +50,8 @@ public class ParameterNode {
      * @param name   the parameter's name.
      */
     public ParameterNode(final String name, final int access) {
-        this.name = name;
-        this.access = access;
+        this.setName(name);
+        this.setAccess(access);
     }
 
     /**
@@ -67,6 +60,29 @@ public class ParameterNode {
      * @param methodVisitor a method visitor.
      */
     public void accept(final MethodVisitor methodVisitor) {
-        methodVisitor.visitParameter(name, access);
+        methodVisitor.visitParameter(getName(), getAccess());
+    }
+
+    /**
+     * The parameter's name.
+     */
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * The parameter's access flags (see {@link Opcodes}). Valid values are
+     * <tt>ACC_FINAL</tt>, <tt>ACC_SYNTHETIC</tt> and <tt>ACC_MANDATED</tt>.
+     */
+    public int getAccess() {
+        return access;
+    }
+
+    public void setAccess(int access) {
+        this.access = access;
     }
 }

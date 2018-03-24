@@ -41,25 +41,13 @@ import java.util.Map;
  */
 public class TableSwitchInsnNode extends AbstractInsnNode {
 
-    /**
-     * The minimum key value.
-     */
-    public int min;
+    private int min;
 
-    /**
-     * The maximum key value.
-     */
-    public int max;
+    private int max;
 
-    /**
-     * Beginning of the default handler block.
-     */
-    public LabelNode dflt;
+    private LabelNode dflt;
 
-    /**
-     * Beginnings of the handler blocks. This list is a list of {@link LabelNode} objects.
-     */
-    public List<LabelNode> labels;
+    private List<LabelNode> labels;
 
     /**
      * Constructs a new {@link TableSwitchInsnNode}.
@@ -73,10 +61,10 @@ public class TableSwitchInsnNode extends AbstractInsnNode {
     public TableSwitchInsnNode(
             final int min, final int max, final LabelNode dflt, final LabelNode... labels) {
         super(Opcodes.TABLESWITCH);
-        this.min = min;
-        this.max = max;
-        this.dflt = dflt;
-        this.labels = Util.asArrayList(labels);
+        this.setMin(min);
+        this.setMax(max);
+        this.setDflt(dflt);
+        this.setLabels(Util.asArrayList(labels));
     }
 
     @Override
@@ -86,17 +74,61 @@ public class TableSwitchInsnNode extends AbstractInsnNode {
 
     @Override
     public void accept(final MethodVisitor methodVisitor) {
-        Label[] labelsArray = new Label[this.labels.size()];
+        Label[] labelsArray = new Label[this.getLabels().size()];
         for (int i = 0, n = labelsArray.length; i < n; ++i) {
-            labelsArray[i] = this.labels.get(i).getLabel();
+            labelsArray[i] = this.getLabels().get(i).getLabel();
         }
-        methodVisitor.visitTableSwitchInsn(min, max, dflt.getLabel(), labelsArray);
+        methodVisitor.visitTableSwitchInsn(getMin(), getMax(), getDflt().getLabel(), labelsArray);
         acceptAnnotations(methodVisitor);
     }
 
     @Override
     public AbstractInsnNode clone(final Map<LabelNode, LabelNode> clonedLabels) {
-        return new TableSwitchInsnNode(min, max, clone(dflt, clonedLabels), clone(labels, clonedLabels))
+        return new TableSwitchInsnNode(getMin(), getMax(), clone(getDflt(), clonedLabels), clone(getLabels(), clonedLabels))
                 .cloneAnnotations(this);
+    }
+
+    /**
+     * The minimum key value.
+     */
+    public int getMin() {
+        return min;
+    }
+
+    public void setMin(int min) {
+        this.min = min;
+    }
+
+    /**
+     * The maximum key value.
+     */
+    public int getMax() {
+        return max;
+    }
+
+    public void setMax(int max) {
+        this.max = max;
+    }
+
+    /**
+     * Beginning of the default handler block.
+     */
+    public LabelNode getDflt() {
+        return dflt;
+    }
+
+    public void setDflt(LabelNode dflt) {
+        this.dflt = dflt;
+    }
+
+    /**
+     * Beginnings of the handler blocks. This list is a list of {@link LabelNode} objects.
+     */
+    public List<LabelNode> getLabels() {
+        return labels;
+    }
+
+    public void setLabels(List<LabelNode> labels) {
+        this.labels = labels;
     }
 }

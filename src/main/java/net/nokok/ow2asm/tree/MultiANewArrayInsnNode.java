@@ -40,15 +40,9 @@ import java.util.Map;
  */
 public class MultiANewArrayInsnNode extends AbstractInsnNode {
 
-    /**
-     * An array type descriptor (see {@link Type}).
-     */
-    public String desc;
+    private String desc;
 
-    /**
-     * Number of dimensions of the array to allocate.
-     */
-    public int dims;
+    private int dims;
 
     /**
      * Constructs a new {@link MultiANewArrayInsnNode}.
@@ -58,8 +52,8 @@ public class MultiANewArrayInsnNode extends AbstractInsnNode {
      */
     public MultiANewArrayInsnNode(final String descriptor, final int numDimensions) {
         super(Opcodes.MULTIANEWARRAY);
-        this.desc = descriptor;
-        this.dims = numDimensions;
+        this.setDesc(descriptor);
+        this.setDims(numDimensions);
     }
 
     @Override
@@ -69,12 +63,34 @@ public class MultiANewArrayInsnNode extends AbstractInsnNode {
 
     @Override
     public void accept(final MethodVisitor methodVisitor) {
-        methodVisitor.visitMultiANewArrayInsn(desc, dims);
+        methodVisitor.visitMultiANewArrayInsn(getDesc(), getDims());
         acceptAnnotations(methodVisitor);
     }
 
     @Override
     public AbstractInsnNode clone(final Map<LabelNode, LabelNode> clonedLabels) {
-        return new MultiANewArrayInsnNode(desc, dims).cloneAnnotations(this);
+        return new MultiANewArrayInsnNode(getDesc(), getDims()).cloneAnnotations(this);
+    }
+
+    /**
+     * An array type descriptor (see {@link Type}).
+     */
+    public String getDesc() {
+        return desc;
+    }
+
+    public void setDesc(String desc) {
+        this.desc = desc;
+    }
+
+    /**
+     * Number of dimensions of the array to allocate.
+     */
+    public int getDims() {
+        return dims;
+    }
+
+    public void setDims(int dims) {
+        this.dims = dims;
     }
 }

@@ -41,56 +41,25 @@ import java.util.List;
  */
 public class ModuleNode extends ModuleVisitor {
 
-    /**
-     * The fully qualified name (using dots) of this module.
-     */
-    public String name;
+    private String name;
 
-    /**
-     * The module's access flags, among {@code ACC_OPEN}, {@code ACC_SYNTHETIC} and {@code
-     * ACC_MANDATED}.
-     */
-    public int access;
+    private int access;
 
-    /**
-     * The version of this module. May be <tt>null</tt>.
-     */
-    public String version;
+    private String version;
 
-    /**
-     * The internal name of the main class of this module. May be <tt>null</tt>.
-     */
-    public String mainClass;
+    private String mainClass;
 
-    /**
-     * The internal name of the packages declared by this module. May be <tt>null</tt>.
-     */
-    public List<String> packages;
+    private List<String> packages;
 
-    /**
-     * The dependencies of this module. May be <tt>null</tt>.
-     */
-    public List<ModuleRequireNode> requires;
+    private List<ModuleRequireNode> requires;
 
-    /**
-     * The packages exported by this module. May be <tt>null</tt>.
-     */
-    public List<ModuleExportNode> exports;
+    private List<ModuleExportNode> exports;
 
-    /**
-     * The packages opened by this module. May be <tt>null</tt>.
-     */
-    public List<ModuleOpenNode> opens;
+    private List<ModuleOpenNode> opens;
 
-    /**
-     * The internal names of the services used by this module. May be <tt>null</tt>.
-     */
-    public List<String> uses;
+    private List<String> uses;
 
-    /**
-     * The services provided by this module. May be <tt>null</tt>.
-     */
-    public List<ModuleProvideNode> provides;
+    private List<ModuleProvideNode> provides;
 
     /**
      * Constructs a {@link ModuleNode}. <i>Subclasses must not use this constructor</i>. Instead, they
@@ -107,9 +76,9 @@ public class ModuleNode extends ModuleVisitor {
         if (getClass() != ModuleNode.class) {
             throw new IllegalStateException();
         }
-        this.name = name;
-        this.access = checkAccess(access);
-        this.version = version;
+        this.setName(name);
+        this.setAccess(checkAccess(access));
+        this.setVersion(version);
     }
 
     private static int checkAccess(int access) {
@@ -150,67 +119,67 @@ public class ModuleNode extends ModuleVisitor {
             final List<String> uses,
             final List<ModuleProvideNode> provides) {
         super(api);
-        this.name = name;
-        this.access = checkAccess(access);
-        this.version = version;
-        this.requires = requires;
-        this.exports = exports;
-        this.opens = opens;
-        this.uses = uses;
-        this.provides = provides;
+        this.setName(name);
+        this.setAccess(checkAccess(access));
+        this.setVersion(version);
+        this.setRequires(requires);
+        this.setExports(exports);
+        this.setOpens(opens);
+        this.setUses(uses);
+        this.setProvides(provides);
     }
 
     @Override
     public void visitMainClass(final String mainClass) {
-        this.mainClass = mainClass;
+        this.setMainClass(mainClass);
     }
 
     @Override
     public void visitPackage(final String packaze) {
-        if (packages == null) {
-            packages = new ArrayList<String>(5);
+        if (getPackages() == null) {
+            setPackages(new ArrayList<String>(5));
         }
-        packages.add(packaze);
+        getPackages().add(packaze);
     }
 
     @Override
     public void visitRequire(final String module, final int access, final String version) {
-        if (requires == null) {
-            requires = new ArrayList<ModuleRequireNode>(5);
+        if (getRequires() == null) {
+            setRequires(new ArrayList<ModuleRequireNode>(5));
         }
-        requires.add(new ModuleRequireNode(module, access, version));
+        getRequires().add(new ModuleRequireNode(module, access, version));
     }
 
     @Override
     public void visitExport(final String packaze, final int access, final String... modules) {
-        if (exports == null) {
-            exports = new ArrayList<ModuleExportNode>(5);
+        if (getExports() == null) {
+            setExports(new ArrayList<ModuleExportNode>(5));
         }
-        exports.add(new ModuleExportNode(packaze, access, Util.asArrayList(modules)));
+        getExports().add(new ModuleExportNode(packaze, access, Util.asArrayList(modules)));
     }
 
     @Override
     public void visitOpen(final String packaze, final int access, final String... modules) {
-        if (opens == null) {
-            opens = new ArrayList<ModuleOpenNode>(5);
+        if (getOpens() == null) {
+            setOpens(new ArrayList<ModuleOpenNode>(5));
         }
-        opens.add(new ModuleOpenNode(packaze, access, Util.asArrayList(modules)));
+        getOpens().add(new ModuleOpenNode(packaze, access, Util.asArrayList(modules)));
     }
 
     @Override
     public void visitUse(final String service) {
-        if (uses == null) {
-            uses = new ArrayList<String>(5);
+        if (getUses() == null) {
+            setUses(new ArrayList<String>(5));
         }
-        uses.add(service);
+        getUses().add(service);
     }
 
     @Override
     public void visitProvide(final String service, final String... providers) {
-        if (provides == null) {
-            provides = new ArrayList<ModuleProvideNode>(5);
+        if (getProvides() == null) {
+            setProvides(new ArrayList<ModuleProvideNode>(5));
         }
-        provides.add(new ModuleProvideNode(service, Util.asArrayList(providers)));
+        getProvides().add(new ModuleProvideNode(service, Util.asArrayList(providers)));
     }
 
     @Override
@@ -219,42 +188,153 @@ public class ModuleNode extends ModuleVisitor {
     }
 
     public void accept(final ClassVisitor classVisitor) {
-        ModuleVisitor moduleVisitor = classVisitor.visitModule(name, access, version);
+        ModuleVisitor moduleVisitor = classVisitor.visitModule(getName(), getAccess(), getVersion());
         if (moduleVisitor == null) {
             return;
         }
-        if (mainClass != null) {
-            moduleVisitor.visitMainClass(mainClass);
+        if (getMainClass() != null) {
+            moduleVisitor.visitMainClass(getMainClass());
         }
-        if (packages != null) {
-            for (int i = 0, n = packages.size(); i < n; i++) {
-                moduleVisitor.visitPackage(packages.get(i));
+        if (getPackages() != null) {
+            for (int i = 0, n = getPackages().size(); i < n; i++) {
+                moduleVisitor.visitPackage(getPackages().get(i));
             }
         }
-        if (requires != null) {
-            for (int i = 0, n = requires.size(); i < n; i++) {
-                requires.get(i).accept(moduleVisitor);
+        if (getRequires() != null) {
+            for (int i = 0, n = getRequires().size(); i < n; i++) {
+                getRequires().get(i).accept(moduleVisitor);
             }
         }
-        if (exports != null) {
-            for (int i = 0, n = exports.size(); i < n; i++) {
-                exports.get(i).accept(moduleVisitor);
+        if (getExports() != null) {
+            for (int i = 0, n = getExports().size(); i < n; i++) {
+                getExports().get(i).accept(moduleVisitor);
             }
         }
-        if (opens != null) {
-            for (int i = 0, n = opens.size(); i < n; i++) {
-                opens.get(i).accept(moduleVisitor);
+        if (getOpens() != null) {
+            for (int i = 0, n = getOpens().size(); i < n; i++) {
+                getOpens().get(i).accept(moduleVisitor);
             }
         }
-        if (uses != null) {
-            for (int i = 0, n = uses.size(); i < n; i++) {
-                moduleVisitor.visitUse(uses.get(i));
+        if (getUses() != null) {
+            for (int i = 0, n = getUses().size(); i < n; i++) {
+                moduleVisitor.visitUse(getUses().get(i));
             }
         }
-        if (provides != null) {
-            for (int i = 0, n = provides.size(); i < n; i++) {
-                provides.get(i).accept(moduleVisitor);
+        if (getProvides() != null) {
+            for (int i = 0, n = getProvides().size(); i < n; i++) {
+                getProvides().get(i).accept(moduleVisitor);
             }
         }
+    }
+
+    /**
+     * The fully qualified name (using dots) of this module.
+     */
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    /**
+     * The module's access flags, among {@code ACC_OPEN}, {@code ACC_SYNTHETIC} and {@code
+     * ACC_MANDATED}.
+     */
+    public int getAccess() {
+        return access;
+    }
+
+    public void setAccess(int access) {
+        this.access = access;
+    }
+
+    /**
+     * The version of this module. May be <tt>null</tt>.
+     */
+    public String getVersion() {
+        return version;
+    }
+
+    public void setVersion(String version) {
+        this.version = version;
+    }
+
+    /**
+     * The internal name of the main class of this module. May be <tt>null</tt>.
+     */
+    public String getMainClass() {
+        return mainClass;
+    }
+
+    public void setMainClass(String mainClass) {
+        this.mainClass = mainClass;
+    }
+
+    /**
+     * The internal name of the packages declared by this module. May be <tt>null</tt>.
+     */
+    public List<String> getPackages() {
+        return packages;
+    }
+
+    public void setPackages(List<String> packages) {
+        this.packages = packages;
+    }
+
+    /**
+     * The dependencies of this module. May be <tt>null</tt>.
+     */
+    public List<ModuleRequireNode> getRequires() {
+        return requires;
+    }
+
+    public void setRequires(List<ModuleRequireNode> requires) {
+        this.requires = requires;
+    }
+
+    /**
+     * The packages exported by this module. May be <tt>null</tt>.
+     */
+    public List<ModuleExportNode> getExports() {
+        return exports;
+    }
+
+    public void setExports(List<ModuleExportNode> exports) {
+        this.exports = exports;
+    }
+
+    /**
+     * The packages opened by this module. May be <tt>null</tt>.
+     */
+    public List<ModuleOpenNode> getOpens() {
+        return opens;
+    }
+
+    public void setOpens(List<ModuleOpenNode> opens) {
+        this.opens = opens;
+    }
+
+    /**
+     * The internal names of the services used by this module. May be <tt>null</tt>.
+     */
+    public List<String> getUses() {
+        return uses;
+    }
+
+    public void setUses(List<String> uses) {
+        this.uses = uses;
+    }
+
+    /**
+     * The services provided by this module. May be <tt>null</tt>.
+     */
+    public List<ModuleProvideNode> getProvides() {
+        return provides;
+    }
+
+    public void setProvides(List<ModuleProvideNode> provides) {
+        this.provides = provides;
     }
 }

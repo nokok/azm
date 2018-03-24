@@ -138,8 +138,8 @@ public class Analyzer<V extends Value> implements Opcodes {
         // fact that execution can flow from this instruction to the exception handler.
         for (int i = 0; i < method.tryCatchBlocks.size(); ++i) {
             TryCatchBlockNode tryCatchBlock = method.tryCatchBlocks.get(i);
-            int startIndex = insnList.indexOf(tryCatchBlock.start);
-            int endIndex = insnList.indexOf(tryCatchBlock.end);
+            int startIndex = insnList.indexOf(tryCatchBlock.getStart());
+            int endIndex = insnList.indexOf(tryCatchBlock.getEnd());
             for (int j = startIndex; j < endIndex; ++j) {
                 List<TryCatchBlockNode> insnHandlers = handlers[j];
                 if (insnHandlers == null) {
@@ -160,11 +160,11 @@ public class Analyzer<V extends Value> implements Opcodes {
         Map<LabelNode, Subroutine> jsrSubroutines = new HashMap<LabelNode, Subroutine>();
         while (!jsrInsns.isEmpty()) {
             JumpInsnNode jsrInsn = (JumpInsnNode) jsrInsns.remove(0);
-            Subroutine subroutine = jsrSubroutines.get(jsrInsn.label);
+            Subroutine subroutine = jsrSubroutines.get(jsrInsn.getLabel());
             if (subroutine == null) {
-                subroutine = new Subroutine(jsrInsn.label, method.maxLocals, jsrInsn);
-                jsrSubroutines.put(jsrInsn.label, subroutine);
-                findSubroutine(insnList.indexOf(jsrInsn.label), subroutine, jsrInsns);
+                subroutine = new Subroutine(jsrInsn.getLabel(), method.maxLocals, jsrInsn);
+                jsrSubroutines.put(jsrInsn.getLabel(), subroutine);
+                findSubroutine(insnList.indexOf(jsrInsn.getLabel()), subroutine, jsrInsns);
             } else {
                 subroutine.callers.add(jsrInsn);
             }
@@ -212,33 +212,33 @@ public class Analyzer<V extends Value> implements Opcodes {
                             merge(insnIndex + 1, currentFrame, subroutine);
                             newControlFlowEdge(insnIndex, insnIndex + 1);
                         }
-                        int jumpInsnIndex = insnList.indexOf(jumpInsn.label);
+                        int jumpInsnIndex = insnList.indexOf(jumpInsn.getLabel());
                         if (insnOpcode == JSR) {
                             merge(
                                     jumpInsnIndex,
                                     currentFrame,
-                                    new Subroutine(jumpInsn.label, method.maxLocals, jumpInsn));
+                                    new Subroutine(jumpInsn.getLabel(), method.maxLocals, jumpInsn));
                         } else {
                             merge(jumpInsnIndex, currentFrame, subroutine);
                         }
                         newControlFlowEdge(insnIndex, jumpInsnIndex);
                     } else if (insnNode instanceof LookupSwitchInsnNode) {
                         LookupSwitchInsnNode lookupSwitchInsn = (LookupSwitchInsnNode) insnNode;
-                        int targetInsnIndex = insnList.indexOf(lookupSwitchInsn.dflt);
+                        int targetInsnIndex = insnList.indexOf(lookupSwitchInsn.getDflt());
                         merge(targetInsnIndex, currentFrame, subroutine);
                         newControlFlowEdge(insnIndex, targetInsnIndex);
-                        for (int i = 0; i < lookupSwitchInsn.labels.size(); ++i) {
-                            targetInsnIndex = insnList.indexOf(lookupSwitchInsn.labels.get(i));
+                        for (int i = 0; i < lookupSwitchInsn.getLabels().size(); ++i) {
+                            targetInsnIndex = insnList.indexOf(lookupSwitchInsn.getLabels().get(i));
                             merge(targetInsnIndex, currentFrame, subroutine);
                             newControlFlowEdge(insnIndex, targetInsnIndex);
                         }
                     } else if (insnNode instanceof TableSwitchInsnNode) {
                         TableSwitchInsnNode tableSwitchInsn = (TableSwitchInsnNode) insnNode;
-                        int targetInsnIndex = insnList.indexOf(tableSwitchInsn.dflt);
+                        int targetInsnIndex = insnList.indexOf(tableSwitchInsn.getDflt());
                         merge(targetInsnIndex, currentFrame, subroutine);
                         newControlFlowEdge(insnIndex, targetInsnIndex);
-                        for (int i = 0; i < tableSwitchInsn.labels.size(); ++i) {
-                            targetInsnIndex = insnList.indexOf(tableSwitchInsn.labels.get(i));
+                        for (int i = 0; i < tableSwitchInsn.getLabels().size(); ++i) {
+                            targetInsnIndex = insnList.indexOf(tableSwitchInsn.getLabels().get(i));
                             merge(targetInsnIndex, currentFrame, subroutine);
                             newControlFlowEdge(insnIndex, targetInsnIndex);
                         }
@@ -271,7 +271,7 @@ public class Analyzer<V extends Value> implements Opcodes {
                                     subroutine.localsUsed[var + 1] = true;
                                 }
                             } else if (insnNode instanceof IincInsnNode) {
-                                int var = ((IincInsnNode) insnNode).var;
+                                int var = ((IincInsnNode) insnNode).getVar();
                                 subroutine.localsUsed[var] = true;
                             }
                         }
@@ -285,16 +285,16 @@ public class Analyzer<V extends Value> implements Opcodes {
                     for (int i = 0; i < insnHandlers.size(); ++i) {
                         TryCatchBlockNode tryCatchBlock = insnHandlers.get(i);
                         Type catchType;
-                        if (tryCatchBlock.type == null) {
+                        if (tryCatchBlock.getType() == null) {
                             catchType = Type.getObjectType("java/lang/Throwable");
                         } else {
-                            catchType = Type.getObjectType(tryCatchBlock.type);
+                            catchType = Type.getObjectType(tryCatchBlock.getType());
                         }
                         if (newControlFlowExceptionEdge(insnIndex, tryCatchBlock)) {
                             Frame<V> handler = new Frame<V>(oldFrame);
                             handler.clearStack();
                             handler.push(interpreter.newValue(catchType));
-                            merge(insnList.indexOf(tryCatchBlock.handler), handler, subroutine);
+                            merge(insnList.indexOf(tryCatchBlock.getHandler()), handler, subroutine);
                         }
                     }
                 }
@@ -342,20 +342,20 @@ public class Analyzer<V extends Value> implements Opcodes {
                     jsrInsns.add(currentInsn);
                 } else {
                     JumpInsnNode jumpInsn = (JumpInsnNode) currentInsn;
-                    findSubroutine(insnList.indexOf(jumpInsn.label), subroutine, jsrInsns);
+                    findSubroutine(insnList.indexOf(jumpInsn.getLabel()), subroutine, jsrInsns);
                 }
             } else if (currentInsn instanceof TableSwitchInsnNode) {
                 TableSwitchInsnNode tableSwitchInsn = (TableSwitchInsnNode) currentInsn;
-                findSubroutine(insnList.indexOf(tableSwitchInsn.dflt), subroutine, jsrInsns);
-                for (int i = tableSwitchInsn.labels.size() - 1; i >= 0; --i) {
-                    LabelNode l = tableSwitchInsn.labels.get(i);
+                findSubroutine(insnList.indexOf(tableSwitchInsn.getDflt()), subroutine, jsrInsns);
+                for (int i = tableSwitchInsn.getLabels().size() - 1; i >= 0; --i) {
+                    LabelNode l = tableSwitchInsn.getLabels().get(i);
                     findSubroutine(insnList.indexOf(l), subroutine, jsrInsns);
                 }
             } else if (currentInsn instanceof LookupSwitchInsnNode) {
                 LookupSwitchInsnNode lookupSwitchInsn = (LookupSwitchInsnNode) currentInsn;
-                findSubroutine(insnList.indexOf(lookupSwitchInsn.dflt), subroutine, jsrInsns);
-                for (int i = lookupSwitchInsn.labels.size() - 1; i >= 0; --i) {
-                    LabelNode l = lookupSwitchInsn.labels.get(i);
+                findSubroutine(insnList.indexOf(lookupSwitchInsn.getDflt()), subroutine, jsrInsns);
+                for (int i = lookupSwitchInsn.getLabels().size() - 1; i >= 0; --i) {
+                    LabelNode l = lookupSwitchInsn.getLabels().get(i);
                     findSubroutine(insnList.indexOf(l), subroutine, jsrInsns);
                 }
             }
@@ -365,7 +365,7 @@ public class Analyzer<V extends Value> implements Opcodes {
             if (insnHandlers != null) {
                 for (int i = 0; i < insnHandlers.size(); ++i) {
                     TryCatchBlockNode tryCatchBlock = insnHandlers.get(i);
-                    findSubroutine(insnList.indexOf(tryCatchBlock.handler), subroutine, jsrInsns);
+                    findSubroutine(insnList.indexOf(tryCatchBlock.getHandler()), subroutine, jsrInsns);
                 }
             }
 
@@ -515,7 +515,7 @@ public class Analyzer<V extends Value> implements Opcodes {
      */
     protected boolean newControlFlowExceptionEdge(
             final int insnIndex, final TryCatchBlockNode tryCatchBlock) {
-        return newControlFlowExceptionEdge(insnIndex, insnList.indexOf(tryCatchBlock.handler));
+        return newControlFlowExceptionEdge(insnIndex, insnList.indexOf(tryCatchBlock.getHandler()));
     }
 
     // -----------------------------------------------------------------------------------------------
