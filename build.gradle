@@ -16,7 +16,7 @@ test {
 
 tasks.withType(AbstractCompile)*.options*.encoding = tasks.withType(GroovyCompile)*.groovyOptions*.encoding = 'UTF-8'
 
-def versionNumber = '0.1.4'
+def versionNumber = '0.1.5'
 
 bintray {
   user = System.getenv('BINTRAY_USER')
