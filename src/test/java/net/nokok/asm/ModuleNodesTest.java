@@ -1,9 +1,9 @@
 package net.nokok.asm;
 
 import org.junit.jupiter.api.Test;
-import net.nokok.ow2asm.ClassReader;
-import net.nokok.ow2asm.tree.ClassNode;
-import net.nokok.ow2asm.tree.ModuleNode;
+import net.nokok.azm.ClassReader;
+import net.nokok.azm.tree.ClassNode;
+import net.nokok.azm.tree.ModuleNode;
 
 import javax.tools.Diagnostic;
 import javax.tools.DiagnosticCollector;

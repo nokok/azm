@@ -1,12 +1,12 @@
 package net.nokok.asm;
 
-import net.nokok.ow2asm.ClassWriter;
-import net.nokok.ow2asm.Opcodes;
-import net.nokok.ow2asm.tree.ModuleExportNode;
-import net.nokok.ow2asm.tree.ModuleNode;
-import net.nokok.ow2asm.tree.ModuleOpenNode;
-import net.nokok.ow2asm.tree.ModuleProvideNode;
-import net.nokok.ow2asm.tree.ModuleRequireNode;
+import net.nokok.azm.ClassWriter;
+import net.nokok.azm.Opcodes;
+import net.nokok.azm.tree.ModuleExportNode;
+import net.nokok.azm.tree.ModuleNode;
+import net.nokok.azm.tree.ModuleOpenNode;
+import net.nokok.azm.tree.ModuleProvideNode;
+import net.nokok.azm.tree.ModuleRequireNode;
 
 import java.util.ArrayList;
 import java.util.List;

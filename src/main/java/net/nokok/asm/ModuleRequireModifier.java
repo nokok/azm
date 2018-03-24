@@ -1,6 +1,6 @@
 package net.nokok.asm;
 
-import net.nokok.ow2asm.Opcodes;
+import net.nokok.azm.Opcodes;
 
 public enum ModuleRequireModifier {
     STATIC(Opcodes.ACC_STATIC),
