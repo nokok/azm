@@ -16,7 +16,7 @@ test {
 
 tasks.withType(AbstractCompile)*.options*.encoding = tasks.withType(GroovyCompile)*.groovyOptions*.encoding = 'UTF-8'
 
-def versionNumber = '0.1.5'
+def versionNumber = '0.1.6'
 
 bintray {
   user = System.getenv('BINTRAY_USER')
@@ -35,15 +35,15 @@ bintray {
       attributes = [:]
     }
   }
-  filesSpec {
-    from 'build/libs'
-    into 'standalone_files/level1'
-  }
 }
 
 dependencies {
   testCompile 'org.junit.jupiter:junit-jupiter-api:5.0.0'
   testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.0.0'
+}
+
+task sourceJar(type: Jar) {
+  from sourceSets.main.allJava
 }
 
 publishing {
@@ -53,6 +53,10 @@ publishing {
       groupId 'net.nokok'
       artifactId 'azm'
       version versionNumber
+
+      artifact sourceJar {
+        classifier "sources"
+      }
     }
   }
 }
