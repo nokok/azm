@@ -87,9 +87,10 @@ public class ModuleNode extends ModuleVisitor {
         case Opcodes.ACC_OPEN:
         case Opcodes.ACC_SYNTHETIC:
         case Opcodes.ACC_MANDATED:
+        case 0:
             return access;
         default:
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(String.valueOf(access));
         }
     }
 

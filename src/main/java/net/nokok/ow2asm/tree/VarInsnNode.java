@@ -89,7 +89,7 @@ public class VarInsnNode extends AbstractInsnNode {
             /* no op*/
             return opcode;
         default:
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(String.valueOf(opcode));
         }
     }
 

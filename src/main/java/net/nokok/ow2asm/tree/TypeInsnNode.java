@@ -83,7 +83,7 @@ public class TypeInsnNode extends AbstractInsnNode {
         case Opcodes.INSTANCEOF:
             return opcode;
         default:
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(String.valueOf(opcode));
         }
     }
 

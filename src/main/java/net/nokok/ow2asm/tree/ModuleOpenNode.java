@@ -65,9 +65,10 @@ public class ModuleOpenNode {
         switch (access) {
         case Opcodes.ACC_SYNTHETIC:
         case Opcodes.ACC_MANDATED:
+        case 0:
             return access;
         default:
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(String.valueOf(access));
         }
     }
 

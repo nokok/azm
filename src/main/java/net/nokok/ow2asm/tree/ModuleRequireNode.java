@@ -65,9 +65,10 @@ public class ModuleRequireNode {
         case Opcodes.ACC_STATIC_PHASE:
         case Opcodes.ACC_SYNTHETIC:
         case Opcodes.ACC_MANDATED:
+        case 0:
             return access;
         default:
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException(String.valueOf(access));
         }
 
     }
