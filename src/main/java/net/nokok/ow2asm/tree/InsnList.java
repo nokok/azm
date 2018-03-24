@@ -29,6 +29,8 @@ package net.nokok.ow2asm.tree;
 
 import net.nokok.ow2asm.MethodVisitor;
 
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
 import java.util.Objects;
@@ -37,7 +39,7 @@ import java.util.Objects;
  * A doubly linked list of {@link AbstractInsnNode} objects. <i>This implementation is not thread
  * safe</i>.
  */
-public class InsnList {
+public class InsnList implements Collection<AbstractInsnNode> {
 
     /**
      * The number of instructions in this list.
@@ -67,6 +69,24 @@ public class InsnList {
      */
     public int size() {
         return size;
+    }
+
+    @Override
+    public boolean isEmpty() {
+        return this.size == 0;
+    }
+
+    @Override
+    public boolean contains(Object o) {
+        for (AbstractInsnNode node : cache) {
+            if (node == null) {
+                continue;
+            }
+            if (node.equals(o)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -191,6 +211,11 @@ public class InsnList {
         return insnNodeArray;
     }
 
+    @Override
+    public <T> T[] toArray(T[] a) {
+        return (T[]) this.cache;
+    }
+
     /**
      * Replaces an instruction of this list with another instruction.
      *
@@ -229,7 +254,7 @@ public class InsnList {
      *
      * @param insnNode an instruction, <i>which must not belong to any {@link InsnList}</i>.
      */
-    public void add(final AbstractInsnNode insnNode) {
+    public boolean add(final AbstractInsnNode insnNode) {
         ++size;
         if (lastInsn == null) {
             firstInsn = insnNode;
@@ -241,6 +266,33 @@ public class InsnList {
         lastInsn = insnNode;
         cache = null;
         insnNode.index = 0; // insnNode now belongs to an InsnList.
+        return true;
+    }
+
+    @Override
+    public boolean remove(Object o) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean containsAll(Collection<?> c) {
+        return Arrays.asList(this.cache).containsAll(c);
+    }
+
+    @Override
+    public boolean addAll(Collection<? extends AbstractInsnNode> c) {
+        c.forEach(this::add);
+        return true;
+    }
+
+    @Override
+    public boolean removeAll(Collection<?> c) {
+        throw new UnsupportedOperationException();
+    }
+
+    @Override
+    public boolean retainAll(Collection<?> c) {
+        throw new UnsupportedOperationException();
     }
 
     /**
