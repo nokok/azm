@@ -32,6 +32,7 @@ import net.nokok.ow2asm.Opcodes;
 import net.nokok.ow2asm.Type;
 
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * A node that represents a MULTIANEWARRAY instruction.
@@ -92,5 +93,21 @@ public class MultiANewArrayInsnNode extends AbstractInsnNode {
 
     public void setDims(int dims) {
         this.dims = dims;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        MultiANewArrayInsnNode that = (MultiANewArrayInsnNode) o;
+        return getDims() == that.getDims() &&
+                Objects.equals(getDesc(), that.getDesc());
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(super.hashCode(), getDesc(), getDims());
     }
 }

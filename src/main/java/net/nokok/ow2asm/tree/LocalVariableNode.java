@@ -29,6 +29,8 @@ package net.nokok.ow2asm.tree;
 
 import net.nokok.ow2asm.MethodVisitor;
 
+import java.util.Objects;
+
 /**
  * A node that represents a local variable declaration.
  *
@@ -148,5 +150,24 @@ public class LocalVariableNode {
 
     public void setIndex(int index) {
         this.index = index;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LocalVariableNode that = (LocalVariableNode) o;
+        return getIndex() == that.getIndex() &&
+                Objects.equals(getName(), that.getName()) &&
+                Objects.equals(getDesc(), that.getDesc()) &&
+                Objects.equals(getSignature(), that.getSignature()) &&
+                Objects.equals(getStart(), that.getStart()) &&
+                Objects.equals(getEnd(), that.getEnd());
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(getName(), getDesc(), getSignature(), getStart(), getEnd(), getIndex());
     }
 }

@@ -33,6 +33,7 @@ import net.nokok.ow2asm.Opcodes;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * A node that represents a LOOKUPSWITCH instruction.
@@ -120,5 +121,22 @@ public class LookupSwitchInsnNode extends AbstractInsnNode {
 
     public void setLabels(List<LabelNode> labels) {
         this.labels = labels;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        LookupSwitchInsnNode that = (LookupSwitchInsnNode) o;
+        return Objects.equals(getDflt(), that.getDflt()) &&
+                Objects.equals(getKeys(), that.getKeys()) &&
+                Objects.equals(getLabels(), that.getLabels());
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(super.hashCode(), getDflt(), getKeys(), getLabels());
     }
 }

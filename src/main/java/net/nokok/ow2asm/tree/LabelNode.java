@@ -31,6 +31,7 @@ import net.nokok.ow2asm.Label;
 import net.nokok.ow2asm.MethodVisitor;
 
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * An {@link AbstractInsnNode} that encapsulates a {@link Label}.
@@ -72,5 +73,20 @@ public class LabelNode extends AbstractInsnNode {
 
     public void resetLabel() {
         value = null;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        LabelNode labelNode = (LabelNode) o;
+        return Objects.equals(value, labelNode.value);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(super.hashCode(), value);
     }
 }

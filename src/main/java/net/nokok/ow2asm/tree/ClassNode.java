@@ -39,6 +39,7 @@ import net.nokok.ow2asm.TypePath;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A node that represents a class.
@@ -422,5 +423,24 @@ public class ClassNode extends ClassVisitor {
             methods.get(i).accept(classVisitor);
         }
         classVisitor.visitEnd();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ClassNode classNode = (ClassNode) o;
+        return version == classNode.version &&
+                access == classNode.access &&
+                Objects.equals(name, classNode.name) &&
+                Objects.equals(signature, classNode.signature) &&
+                Objects.equals(superName, classNode.superName) &&
+                Objects.equals(interfaces, classNode.interfaces);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(version, access, name, signature, superName, interfaces);
     }
 }

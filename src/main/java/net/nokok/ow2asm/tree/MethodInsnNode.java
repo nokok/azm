@@ -32,6 +32,7 @@ import net.nokok.ow2asm.Opcodes;
 import net.nokok.ow2asm.Type;
 
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * A node that represents a method instruction. A method instruction is an instruction that invokes
@@ -159,5 +160,23 @@ public class MethodInsnNode extends AbstractInsnNode {
 
     public void setItf(boolean itf) {
         this.itf = itf;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        MethodInsnNode that = (MethodInsnNode) o;
+        return isItf() == that.isItf() &&
+                Objects.equals(getOwner(), that.getOwner()) &&
+                Objects.equals(getName(), that.getName()) &&
+                Objects.equals(getDesc(), that.getDesc());
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(super.hashCode(), getOwner(), getName(), getDesc(), isItf());
     }
 }

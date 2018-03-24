@@ -31,6 +31,7 @@ import net.nokok.ow2asm.MethodVisitor;
 import net.nokok.ow2asm.Opcodes;
 
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * A node that represents a local variable instruction. A local variable instruction is an
@@ -92,6 +93,7 @@ public class VarInsnNode extends AbstractInsnNode {
         }
     }
 
+
     @Override
     public int getType() {
         return VAR_INSN;
@@ -110,5 +112,20 @@ public class VarInsnNode extends AbstractInsnNode {
 
     public void setVar(int var) {
         this.var = var;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        VarInsnNode that = (VarInsnNode) o;
+        return getVar() == that.getVar();
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(super.hashCode(), getVar());
     }
 }

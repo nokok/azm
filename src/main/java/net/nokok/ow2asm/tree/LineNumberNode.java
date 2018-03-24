@@ -30,6 +30,7 @@ package net.nokok.ow2asm.tree;
 import net.nokok.ow2asm.MethodVisitor;
 
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * A node that represents a line number declaration. These nodes are pseudo instruction nodes in
@@ -91,5 +92,21 @@ public class LineNumberNode extends AbstractInsnNode {
 
     public void setStart(LabelNode start) {
         this.start = start;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        LineNumberNode that = (LineNumberNode) o;
+        return getLine() == that.getLine() &&
+                Objects.equals(getStart(), that.getStart());
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(super.hashCode(), getLine(), getStart());
     }
 }

@@ -39,6 +39,7 @@ import net.nokok.ow2asm.TypePath;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A node that represents a method.
@@ -834,5 +835,23 @@ public class MethodNode extends MethodVisitor {
             visited = true;
         }
         methodVisitor.visitEnd();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        MethodNode that = (MethodNode) o;
+        return access == that.access &&
+                Objects.equals(name, that.name) &&
+                Objects.equals(desc, that.desc) &&
+                Objects.equals(exceptions, that.exceptions) &&
+                Objects.equals(parameters, that.parameters);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(access, name, desc, exceptions, parameters);
     }
 }

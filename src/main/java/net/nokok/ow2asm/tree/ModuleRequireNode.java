@@ -30,6 +30,8 @@ package net.nokok.ow2asm.tree;
 import net.nokok.ow2asm.ModuleVisitor;
 import net.nokok.ow2asm.Opcodes;
 
+import java.util.Objects;
+
 /**
  * A node that represents a required module with its name and access of a module descriptor.
  *
@@ -111,5 +113,21 @@ public class ModuleRequireNode {
 
     public void setVersion(String version) {
         this.version = version;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ModuleRequireNode that = (ModuleRequireNode) o;
+        return getAccess() == that.getAccess() &&
+                Objects.equals(getModule(), that.getModule()) &&
+                Objects.equals(getVersion(), that.getVersion());
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(getModule(), getAccess(), getVersion());
     }
 }

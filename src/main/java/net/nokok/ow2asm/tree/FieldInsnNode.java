@@ -31,6 +31,7 @@ import net.nokok.ow2asm.MethodVisitor;
 import net.nokok.ow2asm.Type;
 
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * A node that represents a field instruction. A field instruction is an instruction that loads or
@@ -122,5 +123,22 @@ public class FieldInsnNode extends AbstractInsnNode {
 
     public void setDesc(String desc) {
         this.desc = desc;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        FieldInsnNode that = (FieldInsnNode) o;
+        return Objects.equals(getOwner(), that.getOwner()) &&
+                Objects.equals(getName(), that.getName()) &&
+                Objects.equals(getDesc(), that.getDesc());
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(super.hashCode(), getOwner(), getName(), getDesc());
     }
 }

@@ -30,6 +30,8 @@ package net.nokok.ow2asm.tree;
 import net.nokok.ow2asm.MethodVisitor;
 import net.nokok.ow2asm.Opcodes;
 
+import java.util.Objects;
+
 /**
  * A node that represents a parameter of a method.
  *
@@ -84,5 +86,20 @@ public class ParameterNode {
 
     public void setAccess(int access) {
         this.access = access;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ParameterNode that = (ParameterNode) o;
+        return getAccess() == that.getAccess() &&
+                Objects.equals(getName(), that.getName());
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(getName(), getAccess());
     }
 }

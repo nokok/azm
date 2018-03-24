@@ -30,6 +30,7 @@ package net.nokok.ow2asm.tree;
 import net.nokok.ow2asm.MethodVisitor;
 
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * A node that represents a jump instruction. A jump instruction is an instruction that may jump to
@@ -92,5 +93,20 @@ public class JumpInsnNode extends AbstractInsnNode {
 
     public void setLabel(LabelNode label) {
         this.label = label;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        JumpInsnNode that = (JumpInsnNode) o;
+        return Objects.equals(getLabel(), that.getLabel());
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(super.hashCode(), getLabel());
     }
 }

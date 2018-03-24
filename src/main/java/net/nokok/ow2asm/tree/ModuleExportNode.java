@@ -31,6 +31,7 @@ import net.nokok.ow2asm.ModuleVisitor;
 import net.nokok.ow2asm.Opcodes;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A node that represents an exported package with its name and the module that can access to it.
@@ -114,5 +115,21 @@ public class ModuleExportNode {
 
     public void setModules(List<String> modules) {
         this.modules = modules;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ModuleExportNode that = (ModuleExportNode) o;
+        return getAccess() == that.getAccess() &&
+                Objects.equals(getPackaze(), that.getPackaze()) &&
+                Objects.equals(getModules(), that.getModules());
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(getPackaze(), getAccess(), getModules());
     }
 }

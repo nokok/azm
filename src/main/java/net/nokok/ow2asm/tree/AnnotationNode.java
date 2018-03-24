@@ -33,6 +33,7 @@ import net.nokok.ow2asm.Type;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A node that represents an annotation.
@@ -246,5 +247,20 @@ public class AnnotationNode extends AnnotationVisitor {
 
     public void setValues(List<Object> values) {
         this.values = values;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AnnotationNode that = (AnnotationNode) o;
+        return Objects.equals(getDesc(), that.getDesc()) &&
+                Objects.equals(getValues(), that.getValues());
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(getDesc(), getValues());
     }
 }

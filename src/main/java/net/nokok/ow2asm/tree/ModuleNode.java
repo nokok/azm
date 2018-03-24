@@ -33,6 +33,7 @@ import net.nokok.ow2asm.Opcodes;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A node that represents a module declaration.
@@ -336,5 +337,28 @@ public class ModuleNode extends ModuleVisitor {
 
     public void setProvides(List<ModuleProvideNode> provides) {
         this.provides = provides;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ModuleNode that = (ModuleNode) o;
+        return getAccess() == that.getAccess() &&
+                Objects.equals(getName(), that.getName()) &&
+                Objects.equals(getVersion(), that.getVersion()) &&
+                Objects.equals(getMainClass(), that.getMainClass()) &&
+                Objects.equals(getPackages(), that.getPackages()) &&
+                Objects.equals(getRequires(), that.getRequires()) &&
+                Objects.equals(getExports(), that.getExports()) &&
+                Objects.equals(getOpens(), that.getOpens()) &&
+                Objects.equals(getUses(), that.getUses()) &&
+                Objects.equals(getProvides(), that.getProvides());
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(getName(), getAccess(), getVersion(), getMainClass(), getPackages(), getRequires(), getExports(), getOpens(), getUses(), getProvides());
     }
 }

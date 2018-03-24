@@ -31,6 +31,8 @@ import net.nokok.ow2asm.Opcodes;
 import net.nokok.ow2asm.TypePath;
 import net.nokok.ow2asm.TypeReference;
 
+import java.util.Objects;
+
 /**
  * A node that represents a type annotation.
  *
@@ -100,5 +102,21 @@ public class TypeAnnotationNode extends AnnotationNode {
 
     public void setTypePath(TypePath typePath) {
         this.typePath = typePath;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        TypeAnnotationNode that = (TypeAnnotationNode) o;
+        return getTypeRef() == that.getTypeRef() &&
+                Objects.equals(getTypePath(), that.getTypePath());
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(super.hashCode(), getTypeRef(), getTypePath());
     }
 }

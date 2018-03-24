@@ -31,6 +31,7 @@ import net.nokok.ow2asm.MethodVisitor;
 
 import java.util.ListIterator;
 import java.util.NoSuchElementException;
+import java.util.Objects;
 
 /**
  * A doubly linked list of {@link AbstractInsnNode} objects. <i>This implementation is not thread
@@ -589,5 +590,21 @@ public class InsnList {
                 throw new IllegalStateException();
             }
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        InsnList insnList = (InsnList) o;
+        return size == insnList.size &&
+                Objects.equals(firstInsn, insnList.firstInsn) &&
+                Objects.equals(lastInsn, insnList.lastInsn);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(size, firstInsn, lastInsn);
     }
 }

@@ -30,6 +30,7 @@ package net.nokok.ow2asm.tree;
 import net.nokok.ow2asm.ModuleVisitor;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A node that represents a service and its implementation provided by the current module.
@@ -83,5 +84,20 @@ public class ModuleProvideNode {
 
     public void setProviders(List<String> providers) {
         this.providers = providers;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ModuleProvideNode that = (ModuleProvideNode) o;
+        return Objects.equals(getService(), that.getService()) &&
+                Objects.equals(getProviders(), that.getProviders());
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(getService(), getProviders());
     }
 }

@@ -32,7 +32,9 @@ import net.nokok.ow2asm.MethodVisitor;
 import net.nokok.ow2asm.Opcodes;
 import net.nokok.ow2asm.Type;
 
+import java.util.Arrays;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * A node that represents an invokedynamic instruction.
@@ -130,5 +132,25 @@ public class InvokeDynamicInsnNode extends AbstractInsnNode {
 
     public void setBsmArgs(Object[] bsmArgs) {
         this.bsmArgs = bsmArgs;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        InvokeDynamicInsnNode that = (InvokeDynamicInsnNode) o;
+        return Objects.equals(getName(), that.getName()) &&
+                Objects.equals(getDesc(), that.getDesc()) &&
+                Objects.equals(getBsm(), that.getBsm()) &&
+                Arrays.equals(getBsmArgs(), that.getBsmArgs());
+    }
+
+    @Override
+    public int hashCode() {
+
+        int result = Objects.hash(super.hashCode(), getName(), getDesc(), getBsm());
+        result = 31 * result + Arrays.hashCode(getBsmArgs());
+        return result;
     }
 }

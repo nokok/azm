@@ -32,6 +32,7 @@ import net.nokok.ow2asm.MethodVisitor;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * A node that represents a bytecode instruction. <i>An instruction can appear at most once in at
@@ -252,6 +253,20 @@ public abstract class AbstractInsnNode {
      */
     static LabelNode clone(final LabelNode label, final Map<LabelNode, LabelNode> clonedLabels) {
         return clonedLabels.get(label);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AbstractInsnNode that = (AbstractInsnNode) o;
+        return getOpcode() == that.getOpcode();
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(getOpcode());
     }
 
     /**

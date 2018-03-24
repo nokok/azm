@@ -37,6 +37,7 @@ import net.nokok.ow2asm.TypePath;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A node that represents a field.
@@ -274,5 +275,23 @@ public class FieldNode extends FieldVisitor {
             }
         }
         fieldVisitor.visitEnd();
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        FieldNode fieldNode = (FieldNode) o;
+        return access == fieldNode.access &&
+                Objects.equals(name, fieldNode.name) &&
+                Objects.equals(desc, fieldNode.desc) &&
+                Objects.equals(signature, fieldNode.signature) &&
+                Objects.equals(value, fieldNode.value);
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(access, name, desc, signature, value);
     }
 }

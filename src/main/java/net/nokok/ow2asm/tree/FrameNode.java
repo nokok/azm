@@ -33,6 +33,7 @@ import net.nokok.ow2asm.Opcodes;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * A node that represents a stack map frame. These nodes are pseudo instruction nodes in order to be
@@ -205,5 +206,22 @@ public class FrameNode extends AbstractInsnNode {
 
     public void setStack(List<Object> stack) {
         this.stack = stack;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        if (!super.equals(o)) return false;
+        FrameNode frameNode = (FrameNode) o;
+        return getType() == frameNode.getType() &&
+                Objects.equals(getLocal(), frameNode.getLocal()) &&
+                Objects.equals(getStack(), frameNode.getStack());
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(super.hashCode(), getType(), getLocal(), getStack());
     }
 }

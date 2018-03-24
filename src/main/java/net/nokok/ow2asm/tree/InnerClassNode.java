@@ -30,6 +30,8 @@ package net.nokok.ow2asm.tree;
 import net.nokok.ow2asm.ClassVisitor;
 import net.nokok.ow2asm.Type;
 
+import java.util.Objects;
+
 /**
  * A node that represents an inner class.
  *
@@ -118,5 +120,22 @@ public class InnerClassNode {
 
     public void setAccess(int access) {
         this.access = access;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        InnerClassNode that = (InnerClassNode) o;
+        return getAccess() == that.getAccess() &&
+                Objects.equals(getName(), that.getName()) &&
+                Objects.equals(getOuterName(), that.getOuterName()) &&
+                Objects.equals(getInnerName(), that.getInnerName());
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(getName(), getOuterName(), getInnerName(), getAccess());
     }
 }

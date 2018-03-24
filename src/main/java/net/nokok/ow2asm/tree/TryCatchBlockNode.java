@@ -30,6 +30,7 @@ package net.nokok.ow2asm.tree;
 import net.nokok.ow2asm.MethodVisitor;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * A node that represents a try catch block.
@@ -179,5 +180,22 @@ public class TryCatchBlockNode {
 
     public void setStart(LabelNode start) {
         this.start = start;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TryCatchBlockNode that = (TryCatchBlockNode) o;
+        return Objects.equals(getStart(), that.getStart()) &&
+                Objects.equals(getEnd(), that.getEnd()) &&
+                Objects.equals(getHandler(), that.getHandler()) &&
+                Objects.equals(getType(), that.getType());
+    }
+
+    @Override
+    public int hashCode() {
+
+        return Objects.hash(getStart(), getEnd(), getHandler(), getType());
     }
 }
