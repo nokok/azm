@@ -94,8 +94,6 @@ public class ModuleNode extends ModuleVisitor {
         }
     }
 
-    // TODO(forax): why is there no 'mainClass' and 'packages' parameters in this constructor?
-
     /**
      * Constructs a {@link ModuleNode}.
      *
@@ -115,20 +113,24 @@ public class ModuleNode extends ModuleVisitor {
             final String name,
             final int access,
             final String version,
+            final String mainClass,
+            final List<String> packages,
             final List<ModuleRequireNode> requires,
             final List<ModuleExportNode> exports,
             final List<ModuleOpenNode> opens,
             final List<String> uses,
             final List<ModuleProvideNode> provides) {
         super(api);
-        this.setName(name);
-        this.setAccess(checkAccess(access));
-        this.setVersion(version);
-        this.setRequires(requires);
-        this.setExports(exports);
-        this.setOpens(opens);
-        this.setUses(uses);
-        this.setProvides(provides);
+        this.name = name;
+        this.access = checkAccess(access);
+        this.version = version;
+        this.mainClass = mainClass;
+        this.packages = packages;
+        this.requires = requires;
+        this.exports = exports;
+        this.opens = opens;
+        this.uses = uses;
+        this.provides = provides;
     }
 
     @Override

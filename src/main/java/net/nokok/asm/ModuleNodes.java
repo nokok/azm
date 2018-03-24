@@ -40,6 +40,8 @@ public class ModuleNodes {
                 this.moduleName,
                 this.access,
                 this.version,
+                this.mainClass,
+                this.packages,
                 this.requires,
                 this.exports,
                 this.opens,
