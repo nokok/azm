@@ -260,7 +260,7 @@ public class Frame<V extends Value> {
         case Opcodes.FLOAD:
         case Opcodes.DLOAD:
         case Opcodes.ALOAD:
-            push(interpreter.copyOperation(insn, getLocal(((VarInsnNode) insn).var)));
+            push(interpreter.copyOperation(insn, getLocal(((VarInsnNode) insn).getVar())));
             break;
         case Opcodes.ISTORE:
         case Opcodes.LSTORE:
@@ -268,7 +268,7 @@ public class Frame<V extends Value> {
         case Opcodes.DSTORE:
         case Opcodes.ASTORE:
             value1 = interpreter.copyOperation(insn, pop());
-            var = ((VarInsnNode) insn).var;
+            var = ((VarInsnNode) insn).getVar();
             setLocal(var, value1);
             if (value1.getSize() == 2) {
                 setLocal(var + 1, interpreter.newValue(null));

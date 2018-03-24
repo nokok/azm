@@ -262,7 +262,7 @@ public class Analyzer<V extends Value> implements Opcodes {
                     } else if (insnOpcode != ATHROW && (insnOpcode < IRETURN || insnOpcode > RETURN)) {
                         if (subroutine != null) {
                             if (insnNode instanceof VarInsnNode) {
-                                int var = ((VarInsnNode) insnNode).var;
+                                int var = ((VarInsnNode) insnNode).getVar();
                                 subroutine.localsUsed[var] = true;
                                 if (insnOpcode == LLOAD
                                         || insnOpcode == DLOAD

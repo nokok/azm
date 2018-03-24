@@ -79,24 +79,6 @@ public class Textifier extends Printer {
     public static final int CLASS_SIGNATURE = 5;
 
     /**
-     * @deprecated
-     */
-    @Deprecated
-    public static final int TYPE_DECLARATION = 6;
-
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    public static final int CLASS_DECLARATION = 7;
-
-    /**
-     * @deprecated
-     */
-    @Deprecated
-    public static final int PARAMETERS_DECLARATION = 8;
-
-    /**
      * The type of method handle descriptors. See {@link #appendDescriptor}.
      */
     public static final int HANDLE_DESCRIPTOR = 9;

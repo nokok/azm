@@ -307,14 +307,6 @@ public abstract class Printer {
     protected final int api;
 
     /**
-     * A buffer that can be used to create strings.
-     *
-     * @deprecated
-     */
-    @Deprecated
-    protected final StringBuffer buf;
-
-    /**
      * The builder used to build strings in the various visit methods.
      */
     protected final StringBuilder stringBuilder;
@@ -343,7 +335,6 @@ public abstract class Printer {
      */
     protected Printer(final int api) {
         this.api = api;
-        this.buf = null;
         this.stringBuilder = new StringBuilder();
         this.text = new ArrayList<Object>();
     }

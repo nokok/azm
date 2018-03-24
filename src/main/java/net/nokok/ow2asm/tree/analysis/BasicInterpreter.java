@@ -162,7 +162,7 @@ public class BasicInterpreter extends Interpreter<BasicValue> implements Opcodes
         case GETSTATIC:
             return newValue(Type.getType(((FieldInsnNode) insn).getDesc()));
         case NEW:
-            return newValue(Type.getObjectType(((TypeInsnNode) insn).desc));
+            return newValue(Type.getObjectType(((TypeInsnNode) insn).getDesc()));
         default:
             throw new AssertionError();
         }
@@ -242,13 +242,13 @@ public class BasicInterpreter extends Interpreter<BasicValue> implements Opcodes
             }
             throw new AnalyzerException(insn, "Invalid array type");
         case ANEWARRAY:
-            return newValue(Type.getType("[" + Type.getObjectType(((TypeInsnNode) insn).desc)));
+            return newValue(Type.getType("[" + Type.getObjectType(((TypeInsnNode) insn).getDesc())));
         case ARRAYLENGTH:
             return BasicValue.INT_VALUE;
         case ATHROW:
             return null;
         case CHECKCAST:
-            return newValue(Type.getObjectType(((TypeInsnNode) insn).desc));
+            return newValue(Type.getObjectType(((TypeInsnNode) insn).getDesc()));
         case INSTANCEOF:
             return BasicValue.INT_VALUE;
         case MONITORENTER:
