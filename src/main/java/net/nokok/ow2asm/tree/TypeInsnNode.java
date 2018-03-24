@@ -27,10 +27,10 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 package net.nokok.ow2asm.tree;
 
-import java.util.Map;
-
 import net.nokok.ow2asm.MethodVisitor;
 import net.nokok.ow2asm.Type;
+
+import java.util.Map;
 
 /**
  * A node that represents a type instruction. A type instruction is an instruction that takes a type
@@ -40,48 +40,48 @@ import net.nokok.ow2asm.Type;
  */
 public class TypeInsnNode extends AbstractInsnNode {
 
-  /**
-   * The operand of this instruction. This operand is an internal name (see {@link
-   * Type}).
-   */
-  public String desc;
+    /**
+     * The operand of this instruction. This operand is an internal name (see {@link
+     * Type}).
+     */
+    public String desc;
 
-  /**
-   * Constructs a new {@link TypeInsnNode}.
-   *
-   * @param opcode the opcode of the type instruction to be constructed. This opcode must be NEW,
-   *     ANEWARRAY, CHECKCAST or INSTANCEOF.
-   * @param descriptor the operand of the instruction to be constructed. This operand is an internal
-   *     name (see {@link Type}).
-   */
-  public TypeInsnNode(final int opcode, final String descriptor) {
-    super(opcode);
-    this.desc = descriptor;
-  }
+    /**
+     * Constructs a new {@link TypeInsnNode}.
+     *
+     * @param opcode     the opcode of the type instruction to be constructed. This opcode must be NEW,
+     *                   ANEWARRAY, CHECKCAST or INSTANCEOF.
+     * @param descriptor the operand of the instruction to be constructed. This operand is an internal
+     *                   name (see {@link Type}).
+     */
+    public TypeInsnNode(final int opcode, final String descriptor) {
+        super(opcode);
+        this.desc = descriptor;
+    }
 
-  /**
-   * Sets the opcode of this instruction.
-   *
-   * @param opcode the new instruction opcode. This opcode must be NEW, ANEWARRAY, CHECKCAST or
-   *     INSTANCEOF.
-   */
-  public void setOpcode(final int opcode) {
-    this.opcode = opcode;
-  }
+    /**
+     * Sets the opcode of this instruction.
+     *
+     * @param opcode the new instruction opcode. This opcode must be NEW, ANEWARRAY, CHECKCAST or
+     *               INSTANCEOF.
+     */
+    public void setOpcode(final int opcode) {
+        this.opcode = opcode;
+    }
 
-  @Override
-  public int getType() {
-    return TYPE_INSN;
-  }
+    @Override
+    public int getType() {
+        return TYPE_INSN;
+    }
 
-  @Override
-  public void accept(final MethodVisitor methodVisitor) {
-    methodVisitor.visitTypeInsn(opcode, desc);
-    acceptAnnotations(methodVisitor);
-  }
+    @Override
+    public void accept(final MethodVisitor methodVisitor) {
+        methodVisitor.visitTypeInsn(opcode, desc);
+        acceptAnnotations(methodVisitor);
+    }
 
-  @Override
-  public AbstractInsnNode clone(final Map<LabelNode, LabelNode> clonedLabels) {
-    return new TypeInsnNode(opcode, desc).cloneAnnotations(this);
-  }
+    @Override
+    public AbstractInsnNode clone(final Map<LabelNode, LabelNode> clonedLabels) {
+        return new TypeInsnNode(opcode, desc).cloneAnnotations(this);
+    }
 }

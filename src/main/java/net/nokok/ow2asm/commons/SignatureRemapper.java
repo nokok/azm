@@ -28,10 +28,10 @@
 
 package net.nokok.ow2asm.commons;
 
-import java.util.Stack;
-
 import net.nokok.ow2asm.Opcodes;
 import net.nokok.ow2asm.signature.SignatureVisitor;
+
+import java.util.Stack;
 
 /**
  * A {@link SignatureVisitor} adapter for type mapping.
@@ -40,119 +40,119 @@ import net.nokok.ow2asm.signature.SignatureVisitor;
  */
 public class SignatureRemapper extends SignatureVisitor {
 
-  private final SignatureVisitor v;
+    private final SignatureVisitor v;
 
-  private final Remapper remapper;
+    private final Remapper remapper;
 
-  private Stack<String> classNames = new Stack<String>();
+    private Stack<String> classNames = new Stack<String>();
 
-  public SignatureRemapper(final SignatureVisitor v, final Remapper remapper) {
-    this(Opcodes.ASM6, v, remapper);
-  }
+    public SignatureRemapper(final SignatureVisitor v, final Remapper remapper) {
+        this(Opcodes.ASM6, v, remapper);
+    }
 
-  protected SignatureRemapper(final int api, final SignatureVisitor v, final Remapper remapper) {
-    super(api);
-    this.v = v;
-    this.remapper = remapper;
-  }
+    protected SignatureRemapper(final int api, final SignatureVisitor v, final Remapper remapper) {
+        super(api);
+        this.v = v;
+        this.remapper = remapper;
+    }
 
-  @Override
-  public void visitClassType(String name) {
-    classNames.push(name);
-    v.visitClassType(remapper.mapType(name));
-  }
+    @Override
+    public void visitClassType(String name) {
+        classNames.push(name);
+        v.visitClassType(remapper.mapType(name));
+    }
 
-  @Override
-  public void visitInnerClassType(String name) {
-    String outerClassName = classNames.pop();
-    String className = outerClassName + '$' + name;
-    classNames.push(className);
-    String remappedOuter = remapper.mapType(outerClassName) + '$';
-    String remappedName = remapper.mapType(className);
-    int index =
-        remappedName.startsWith(remappedOuter)
-            ? remappedOuter.length()
-            : remappedName.lastIndexOf('$') + 1;
-    v.visitInnerClassType(remappedName.substring(index));
-  }
+    @Override
+    public void visitInnerClassType(String name) {
+        String outerClassName = classNames.pop();
+        String className = outerClassName + '$' + name;
+        classNames.push(className);
+        String remappedOuter = remapper.mapType(outerClassName) + '$';
+        String remappedName = remapper.mapType(className);
+        int index =
+                remappedName.startsWith(remappedOuter)
+                        ? remappedOuter.length()
+                        : remappedName.lastIndexOf('$') + 1;
+        v.visitInnerClassType(remappedName.substring(index));
+    }
 
-  @Override
-  public void visitFormalTypeParameter(String name) {
-    v.visitFormalTypeParameter(name);
-  }
+    @Override
+    public void visitFormalTypeParameter(String name) {
+        v.visitFormalTypeParameter(name);
+    }
 
-  @Override
-  public void visitTypeVariable(String name) {
-    v.visitTypeVariable(name);
-  }
+    @Override
+    public void visitTypeVariable(String name) {
+        v.visitTypeVariable(name);
+    }
 
-  @Override
-  public SignatureVisitor visitArrayType() {
-    v.visitArrayType();
-    return this;
-  }
+    @Override
+    public SignatureVisitor visitArrayType() {
+        v.visitArrayType();
+        return this;
+    }
 
-  @Override
-  public void visitBaseType(char descriptor) {
-    v.visitBaseType(descriptor);
-  }
+    @Override
+    public void visitBaseType(char descriptor) {
+        v.visitBaseType(descriptor);
+    }
 
-  @Override
-  public SignatureVisitor visitClassBound() {
-    v.visitClassBound();
-    return this;
-  }
+    @Override
+    public SignatureVisitor visitClassBound() {
+        v.visitClassBound();
+        return this;
+    }
 
-  @Override
-  public SignatureVisitor visitExceptionType() {
-    v.visitExceptionType();
-    return this;
-  }
+    @Override
+    public SignatureVisitor visitExceptionType() {
+        v.visitExceptionType();
+        return this;
+    }
 
-  @Override
-  public SignatureVisitor visitInterface() {
-    v.visitInterface();
-    return this;
-  }
+    @Override
+    public SignatureVisitor visitInterface() {
+        v.visitInterface();
+        return this;
+    }
 
-  @Override
-  public SignatureVisitor visitInterfaceBound() {
-    v.visitInterfaceBound();
-    return this;
-  }
+    @Override
+    public SignatureVisitor visitInterfaceBound() {
+        v.visitInterfaceBound();
+        return this;
+    }
 
-  @Override
-  public SignatureVisitor visitParameterType() {
-    v.visitParameterType();
-    return this;
-  }
+    @Override
+    public SignatureVisitor visitParameterType() {
+        v.visitParameterType();
+        return this;
+    }
 
-  @Override
-  public SignatureVisitor visitReturnType() {
-    v.visitReturnType();
-    return this;
-  }
+    @Override
+    public SignatureVisitor visitReturnType() {
+        v.visitReturnType();
+        return this;
+    }
 
-  @Override
-  public SignatureVisitor visitSuperclass() {
-    v.visitSuperclass();
-    return this;
-  }
+    @Override
+    public SignatureVisitor visitSuperclass() {
+        v.visitSuperclass();
+        return this;
+    }
 
-  @Override
-  public void visitTypeArgument() {
-    v.visitTypeArgument();
-  }
+    @Override
+    public void visitTypeArgument() {
+        v.visitTypeArgument();
+    }
 
-  @Override
-  public SignatureVisitor visitTypeArgument(char wildcard) {
-    v.visitTypeArgument(wildcard);
-    return this;
-  }
+    @Override
+    public SignatureVisitor visitTypeArgument(char wildcard) {
+        v.visitTypeArgument(wildcard);
+        return this;
+    }
 
-  @Override
-  public void visitEnd() {
-    v.visitEnd();
-    classNames.pop();
-  }
+    @Override
+    public void visitEnd() {
+        v.visitEnd();
+        classNames.pop();
+    }
 }

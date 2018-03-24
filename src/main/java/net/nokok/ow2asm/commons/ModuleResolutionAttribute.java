@@ -28,10 +28,10 @@
 
 package net.nokok.ow2asm.commons;
 
-import net.nokok.ow2asm.ClassVisitor;
 import net.nokok.ow2asm.Attribute;
 import net.nokok.ow2asm.ByteVector;
 import net.nokok.ow2asm.ClassReader;
+import net.nokok.ow2asm.ClassVisitor;
 import net.nokok.ow2asm.ClassWriter;
 import net.nokok.ow2asm.Label;
 
@@ -42,58 +42,60 @@ import net.nokok.ow2asm.Label;
  * @author Remi Forax
  */
 public final class ModuleResolutionAttribute extends Attribute {
-  /**
-   * Resolution state of a module meaning that the module is not available from the class-path by
-   * default.
-   */
-  public static final int RESOLUTION_DO_NOT_RESOLVE_BY_DEFAULT = 1;
+    /**
+     * Resolution state of a module meaning that the module is not available from the class-path by
+     * default.
+     */
+    public static final int RESOLUTION_DO_NOT_RESOLVE_BY_DEFAULT = 1;
 
-  /** Resolution state of a module meaning the module is marked as deprecated. */
-  public static final int RESOLUTION_WARN_DEPRECATED = 2;
+    /**
+     * Resolution state of a module meaning the module is marked as deprecated.
+     */
+    public static final int RESOLUTION_WARN_DEPRECATED = 2;
 
-  /**
-   * Resolution state of a module meaning the module is marked as deprecated and will be removed in
-   * a future release.
-   */
-  public static final int RESOLUTION_WARN_DEPRECATED_FOR_REMOVAL = 4;
+    /**
+     * Resolution state of a module meaning the module is marked as deprecated and will be removed in
+     * a future release.
+     */
+    public static final int RESOLUTION_WARN_DEPRECATED_FOR_REMOVAL = 4;
 
-  /**
-   * Resolution state of a module meaning the module is not yet standardized, so in incubating mode.
-   */
-  public static final int RESOLUTION_WARN_INCUBATING = 8;
+    /**
+     * Resolution state of a module meaning the module is not yet standardized, so in incubating mode.
+     */
+    public static final int RESOLUTION_WARN_INCUBATING = 8;
 
-  public int resolution;
+    public int resolution;
 
-  /**
-   * Constructs an attribute with a resolution state value.
-   *
-   * @param resolution the resolution state among {@link #RESOLUTION_WARN_DEPRECATED}, {@link
-   *     #RESOLUTION_WARN_DEPRECATED_FOR_REMOVAL}, and {@link #RESOLUTION_WARN_INCUBATING}.
-   */
-  public ModuleResolutionAttribute(final int resolution) {
-    super("ModuleResolution");
-    this.resolution = resolution;
-  }
+    /**
+     * Constructs an attribute with a resolution state value.
+     *
+     * @param resolution the resolution state among {@link #RESOLUTION_WARN_DEPRECATED}, {@link
+     *                   #RESOLUTION_WARN_DEPRECATED_FOR_REMOVAL}, and {@link #RESOLUTION_WARN_INCUBATING}.
+     */
+    public ModuleResolutionAttribute(final int resolution) {
+        super("ModuleResolution");
+        this.resolution = resolution;
+    }
 
-  /**
-   * Constructs an empty attribute that can be used as prototype to be passed as argument of the method
-   * {@link ClassReader#accept(ClassVisitor, Attribute[], int)}.
-   */
-  public ModuleResolutionAttribute() {
-    this(0);
-  }
+    /**
+     * Constructs an empty attribute that can be used as prototype to be passed as argument of the method
+     * {@link ClassReader#accept(ClassVisitor, Attribute[], int)}.
+     */
+    public ModuleResolutionAttribute() {
+        this(0);
+    }
 
-  @Override
-  protected Attribute read(
-      ClassReader cr, int off, int len, char[] buf, int codeOff, Label[] labels) {
-    int resolution = cr.readUnsignedShort(off);
-    return new ModuleResolutionAttribute(resolution);
-  }
+    @Override
+    protected Attribute read(
+            ClassReader cr, int off, int len, char[] buf, int codeOff, Label[] labels) {
+        int resolution = cr.readUnsignedShort(off);
+        return new ModuleResolutionAttribute(resolution);
+    }
 
-  @Override
-  protected ByteVector write(ClassWriter cw, byte[] code, int len, int maxStack, int maxLocals) {
-    ByteVector v = new ByteVector();
-    v.putShort(resolution);
-    return v;
-  }
+    @Override
+    protected ByteVector write(ClassWriter cw, byte[] code, int len, int maxStack, int maxLocals) {
+        ByteVector v = new ByteVector();
+        v.putShort(resolution);
+        return v;
+    }
 }

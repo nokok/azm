@@ -27,11 +27,11 @@
 // THE POSSIBILITY OF SUCH DAMAGE.
 package net.nokok.ow2asm.tree;
 
-import java.util.Map;
-
 import net.nokok.ow2asm.MethodVisitor;
 import net.nokok.ow2asm.Opcodes;
 import net.nokok.ow2asm.Type;
+
+import java.util.Map;
 
 /**
  * A node that represents an LDC instruction.
@@ -40,37 +40,37 @@ import net.nokok.ow2asm.Type;
  */
 public class LdcInsnNode extends AbstractInsnNode {
 
-  /**
-   * The constant to be loaded on the stack. This parameter must be a non null {@link Integer}, a
-   * {@link Float}, a {@link Long}, a {@link Double}, a {@link String} or a {@link
-   * Type}.
-   */
-  public Object cst;
+    /**
+     * The constant to be loaded on the stack. This parameter must be a non null {@link Integer}, a
+     * {@link Float}, a {@link Long}, a {@link Double}, a {@link String} or a {@link
+     * Type}.
+     */
+    public Object cst;
 
-  /**
-   * Constructs a new {@link LdcInsnNode}.
-   *
-   * @param value the constant to be loaded on the stack. This parameter must be a non null {@link
-   *     Integer}, a {@link Float}, a {@link Long}, a {@link Double} or a {@link String}.
-   */
-  public LdcInsnNode(final Object value) {
-    super(Opcodes.LDC);
-    this.cst = value;
-  }
+    /**
+     * Constructs a new {@link LdcInsnNode}.
+     *
+     * @param value the constant to be loaded on the stack. This parameter must be a non null {@link
+     *              Integer}, a {@link Float}, a {@link Long}, a {@link Double} or a {@link String}.
+     */
+    public LdcInsnNode(final Object value) {
+        super(Opcodes.LDC);
+        this.cst = value;
+    }
 
-  @Override
-  public int getType() {
-    return LDC_INSN;
-  }
+    @Override
+    public int getType() {
+        return LDC_INSN;
+    }
 
-  @Override
-  public void accept(final MethodVisitor methodVisitor) {
-    methodVisitor.visitLdcInsn(cst);
-    acceptAnnotations(methodVisitor);
-  }
+    @Override
+    public void accept(final MethodVisitor methodVisitor) {
+        methodVisitor.visitLdcInsn(cst);
+        acceptAnnotations(methodVisitor);
+    }
 
-  @Override
-  public AbstractInsnNode clone(final Map<LabelNode, LabelNode> clonedLabels) {
-    return new LdcInsnNode(cst).cloneAnnotations(this);
-  }
+    @Override
+    public AbstractInsnNode clone(final Map<LabelNode, LabelNode> clonedLabels) {
+        return new LdcInsnNode(cst).cloneAnnotations(this);
+    }
 }

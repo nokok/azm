@@ -1,7 +1,7 @@
 /**
  * ASM: a very small and fast Java bytecode manipulation framework Copyright (c) 2000-2011 INRIA,
  * France Telecom All rights reserved.
- *
+ * <p>
  * <p>Redistribution and use in source and binary forms, with or without modification, are permitted
  * provided that the following conditions are met: 1. Redistributions of source code must retain the
  * above copyright notice, this list of conditions and the following disclaimer. 2. Redistributions
@@ -9,7 +9,7 @@
  * following disclaimer in the documentation and/or other materials provided with the distribution.
  * 3. Neither the name of the copyright holders nor the names of its contributors may be used to
  * endorse or promote products derived from this software without specific prior written permission.
- *
+ * <p>
  * <p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
@@ -21,10 +21,10 @@
  */
 package net.nokok.ow2asm.util;
 
-import java.util.Map;
-
 import net.nokok.ow2asm.Attribute;
 import net.nokok.ow2asm.Label;
+
+import java.util.Map;
 
 /**
  * An {@link Attribute} that can generate the ASM code to create an equivalent
@@ -34,12 +34,12 @@ import net.nokok.ow2asm.Label;
  */
 public interface ASMifiable {
 
-  /**
-   * Generates the ASM code to create an attribute equal to this attribute.
-   *
-   * @param outputBuffer where the generated code must be appended.
-   * @param visitorVariableName the name of the visitor variable in the produced code.
-   * @param labelNames the names of the labels in the generated code.
-   */
-  void asmify(StringBuffer outputBuffer, String visitorVariableName, Map<Label, String> labelNames);
+    /**
+     * Generates the ASM code to create an attribute equal to this attribute.
+     *
+     * @param outputBuffer where the generated code must be appended.
+     * @param visitorVariableName the name of the visitor variable in the produced code.
+     * @param labelNames the names of the labels in the generated code.
+     */
+    void asmify(StringBuffer outputBuffer, String visitorVariableName, Map<Label, String> labelNames);
 }

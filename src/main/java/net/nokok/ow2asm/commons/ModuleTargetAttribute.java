@@ -30,8 +30,8 @@ package net.nokok.ow2asm.commons;
 
 import net.nokok.ow2asm.Attribute;
 import net.nokok.ow2asm.ByteVector;
-import net.nokok.ow2asm.ClassVisitor;
 import net.nokok.ow2asm.ClassReader;
+import net.nokok.ow2asm.ClassVisitor;
 import net.nokok.ow2asm.ClassWriter;
 import net.nokok.ow2asm.Label;
 
@@ -41,38 +41,38 @@ import net.nokok.ow2asm.Label;
  * @author Remi Forax
  */
 public final class ModuleTargetAttribute extends Attribute {
-  public String platform;
+    public String platform;
 
-  /**
-   * Constructs an attribute with a platform name.
-   *
-   * @param platform the platform name on which the module can run.
-   */
-  public ModuleTargetAttribute(final String platform) {
-    super("ModuleTarget");
-    this.platform = platform;
-  }
+    /**
+     * Constructs an attribute with a platform name.
+     *
+     * @param platform the platform name on which the module can run.
+     */
+    public ModuleTargetAttribute(final String platform) {
+        super("ModuleTarget");
+        this.platform = platform;
+    }
 
-  /**
-   * Constructs an empty attribute that can be used as prototype to be passed as argument of the method
-   * {@link ClassReader#accept(ClassVisitor, Attribute[], int)}.
-   */
-  public ModuleTargetAttribute() {
-    this(null);
-  }
+    /**
+     * Constructs an empty attribute that can be used as prototype to be passed as argument of the method
+     * {@link ClassReader#accept(ClassVisitor, Attribute[], int)}.
+     */
+    public ModuleTargetAttribute() {
+        this(null);
+    }
 
-  @Override
-  protected Attribute read(
-      ClassReader cr, int off, int len, char[] buf, int codeOff, Label[] labels) {
-    String platform = cr.readUTF8(off, buf);
-    return new ModuleTargetAttribute(platform);
-  }
+    @Override
+    protected Attribute read(
+            ClassReader cr, int off, int len, char[] buf, int codeOff, Label[] labels) {
+        String platform = cr.readUTF8(off, buf);
+        return new ModuleTargetAttribute(platform);
+    }
 
-  @Override
-  protected ByteVector write(ClassWriter cw, byte[] code, int len, int maxStack, int maxLocals) {
-    ByteVector v = new ByteVector();
-    int index = (platform == null) ? 0 : cw.newUTF8(platform);
-    v.putShort(index);
-    return v;
-  }
+    @Override
+    protected ByteVector write(ClassWriter cw, byte[] code, int len, int maxStack, int maxLocals) {
+        ByteVector v = new ByteVector();
+        int index = (platform == null) ? 0 : cw.newUTF8(platform);
+        v.putShort(index);
+        return v;
+    }
 }

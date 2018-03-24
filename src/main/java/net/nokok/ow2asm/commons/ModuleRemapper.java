@@ -37,67 +37,67 @@ import net.nokok.ow2asm.Opcodes;
  * @author Remi Forax
  */
 public class ModuleRemapper extends ModuleVisitor {
-  private final Remapper remapper;
+    private final Remapper remapper;
 
-  public ModuleRemapper(final ModuleVisitor mv, final Remapper remapper) {
-    this(Opcodes.ASM6, mv, remapper);
-  }
-
-  protected ModuleRemapper(final int api, final ModuleVisitor mv, final Remapper remapper) {
-    super(api, mv);
-    this.remapper = remapper;
-  }
-
-  @Override
-  public void visitMainClass(String mainClass) {
-    super.visitMainClass(remapper.mapType(mainClass));
-  }
-
-  @Override
-  public void visitPackage(String packaze) {
-    super.visitPackage(remapper.mapPackageName(packaze));
-  }
-
-  @Override
-  public void visitRequire(String module, int access, String version) {
-    super.visitRequire(remapper.mapModuleName(module), access, version);
-  }
-
-  @Override
-  public void visitExport(String packaze, int access, String... modules) {
-    String[] newModules = null;
-    if (modules != null) {
-      newModules = new String[modules.length];
-      for (int i = 0; i < modules.length; i++) {
-        newModules[i] = remapper.mapModuleName(modules[i]);
-      }
+    public ModuleRemapper(final ModuleVisitor mv, final Remapper remapper) {
+        this(Opcodes.ASM6, mv, remapper);
     }
-    super.visitExport(remapper.mapPackageName(packaze), access, newModules);
-  }
 
-  @Override
-  public void visitOpen(String packaze, int access, String... modules) {
-    String[] newModules = null;
-    if (modules != null) {
-      newModules = new String[modules.length];
-      for (int i = 0; i < modules.length; i++) {
-        newModules[i] = remapper.mapModuleName(modules[i]);
-      }
+    protected ModuleRemapper(final int api, final ModuleVisitor mv, final Remapper remapper) {
+        super(api, mv);
+        this.remapper = remapper;
     }
-    super.visitOpen(remapper.mapPackageName(packaze), access, newModules);
-  }
 
-  @Override
-  public void visitUse(String service) {
-    super.visitUse(remapper.mapType(service));
-  }
-
-  @Override
-  public void visitProvide(String service, String... providers) {
-    String[] newProviders = new String[providers.length];
-    for (int i = 0; i < providers.length; i++) {
-      newProviders[i] = remapper.mapType(providers[i]);
+    @Override
+    public void visitMainClass(String mainClass) {
+        super.visitMainClass(remapper.mapType(mainClass));
     }
-    super.visitProvide(remapper.mapType(service), newProviders);
-  }
+
+    @Override
+    public void visitPackage(String packaze) {
+        super.visitPackage(remapper.mapPackageName(packaze));
+    }
+
+    @Override
+    public void visitRequire(String module, int access, String version) {
+        super.visitRequire(remapper.mapModuleName(module), access, version);
+    }
+
+    @Override
+    public void visitExport(String packaze, int access, String... modules) {
+        String[] newModules = null;
+        if (modules != null) {
+            newModules = new String[modules.length];
+            for (int i = 0; i < modules.length; i++) {
+                newModules[i] = remapper.mapModuleName(modules[i]);
+            }
+        }
+        super.visitExport(remapper.mapPackageName(packaze), access, newModules);
+    }
+
+    @Override
+    public void visitOpen(String packaze, int access, String... modules) {
+        String[] newModules = null;
+        if (modules != null) {
+            newModules = new String[modules.length];
+            for (int i = 0; i < modules.length; i++) {
+                newModules[i] = remapper.mapModuleName(modules[i]);
+            }
+        }
+        super.visitOpen(remapper.mapPackageName(packaze), access, newModules);
+    }
+
+    @Override
+    public void visitUse(String service) {
+        super.visitUse(remapper.mapType(service));
+    }
+
+    @Override
+    public void visitProvide(String service, String... providers) {
+        String[] newProviders = new String[providers.length];
+        for (int i = 0; i < providers.length; i++) {
+            newProviders[i] = remapper.mapType(providers[i]);
+        }
+        super.visitProvide(remapper.mapType(service), newProviders);
+    }
 }

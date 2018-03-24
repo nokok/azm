@@ -1,7 +1,7 @@
 /**
  * ASM: a very small and fast Java bytecode manipulation framework Copyright (c) 2000-2011 INRIA,
  * France Telecom All rights reserved.
- *
+ * <p>
  * <p>Redistribution and use in source and binary forms, with or without modification, are permitted
  * provided that the following conditions are met: 1. Redistributions of source code must retain the
  * above copyright notice, this list of conditions and the following disclaimer. 2. Redistributions
@@ -9,7 +9,7 @@
  * following disclaimer in the documentation and/or other materials provided with the distribution.
  * 3. Neither the name of the copyright holders nor the names of its contributors may be used to
  * endorse or promote products derived from this software without specific prior written permission.
- *
+ * <p>
  * <p>THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND ANY EXPRESS OR
  * IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND
  * FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR
@@ -21,10 +21,10 @@
  */
 package net.nokok.ow2asm.util;
 
-import java.util.Map;
-
 import net.nokok.ow2asm.Attribute;
 import net.nokok.ow2asm.Label;
+
+import java.util.Map;
 
 /**
  * An {@link Attribute} that can print a readable representation of itself.
@@ -33,11 +33,11 @@ import net.nokok.ow2asm.Label;
  */
 public interface Textifiable {
 
-  /**
-   * Generates a human readable representation of this attribute.
-   *
-   * @param outputBuffer where the human representation of this attribute must be appended.
-   * @param labelNames the human readable names of the labels.
-   */
-  void textify(StringBuffer outputBuffer, Map<Label, String> labelNames);
+    /**
+     * Generates a human readable representation of this attribute.
+     *
+     * @param outputBuffer where the human representation of this attribute must be appended.
+     * @param labelNames the human readable names of the labels.
+     */
+    void textify(StringBuffer outputBuffer, Map<Label, String> labelNames);
 }

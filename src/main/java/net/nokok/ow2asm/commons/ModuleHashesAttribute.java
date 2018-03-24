@@ -28,9 +28,6 @@
 
 package net.nokok.ow2asm.commons;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import net.nokok.ow2asm.Attribute;
 import net.nokok.ow2asm.ByteVector;
 import net.nokok.ow2asm.ClassReader;
@@ -38,86 +35,89 @@ import net.nokok.ow2asm.ClassVisitor;
 import net.nokok.ow2asm.ClassWriter;
 import net.nokok.ow2asm.Label;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * ModuleHashes attribute. This attribute is specific to the OpenJDK and may change in the future.
  *
  * @author Remi Forax
  */
 public final class ModuleHashesAttribute extends Attribute {
-  public String algorithm;
-  public List<String> modules;
-  public List<byte[]> hashes;
+    public String algorithm;
+    public List<String> modules;
+    public List<byte[]> hashes;
 
-  /**
-   * Constructs an attribute with a hashing algorithm, a list of module names, and a list of the same
-   * length of hashes.
-   *
-   * @param algorithm the hashing algorithm name.
-   * @param modules a list of module name
-   * @param hashes a list of hash, one for each module name.
-   */
-  public ModuleHashesAttribute(
-      final String algorithm, final List<String> modules, final List<byte[]> hashes) {
-    super("ModuleHashes");
-    this.algorithm = algorithm;
-    this.modules = modules;
-    this.hashes = hashes;
-  }
-
-  /**
-   * Constructs an empty attribute that can be used as prototype to be passed as argument of the method
-   * {@link ClassReader#accept(ClassVisitor, Attribute[], int)}.
-   */
-  public ModuleHashesAttribute() {
-    this(null, null, null);
-  }
-
-  @Override
-  protected Attribute read(
-      ClassReader cr, int off, int len, char[] buf, int codeOff, Label[] labels) {
-    String hashAlgorithm = cr.readUTF8(off, buf);
-
-    int count = cr.readUnsignedShort(off + 2);
-    ArrayList<String> modules = new ArrayList<String>(count);
-    ArrayList<byte[]> hashes = new ArrayList<byte[]>(count);
-    off += 4;
-
-    for (int i = 0; i < count; i++) {
-      String module = cr.readModule(off, buf);
-      int hashLength = cr.readUnsignedShort(off + 2);
-      off += 4;
-
-      byte[] hash = new byte[hashLength];
-      for (int j = 0; j < hashLength; j++) {
-        hash[j] = (byte) (cr.readByte(off + j) & 0xff);
-      }
-      off += hashLength;
-
-      modules.add(module);
-      hashes.add(hash);
+    /**
+     * Constructs an attribute with a hashing algorithm, a list of module names, and a list of the same
+     * length of hashes.
+     *
+     * @param algorithm the hashing algorithm name.
+     * @param modules   a list of module name
+     * @param hashes    a list of hash, one for each module name.
+     */
+    public ModuleHashesAttribute(
+            final String algorithm, final List<String> modules, final List<byte[]> hashes) {
+        super("ModuleHashes");
+        this.algorithm = algorithm;
+        this.modules = modules;
+        this.hashes = hashes;
     }
-    return new ModuleHashesAttribute(hashAlgorithm, modules, hashes);
-  }
 
-  @Override
-  protected ByteVector write(ClassWriter cw, byte[] code, int len, int maxStack, int maxLocals) {
-    ByteVector v = new ByteVector();
-    int index = cw.newUTF8(algorithm);
-    v.putShort(index);
-
-    int count = (modules == null) ? 0 : modules.size();
-    v.putShort(count);
-
-    for (int i = 0; i < count; i++) {
-      String module = modules.get(i);
-      v.putShort(cw.newModule(module));
-
-      byte[] hash = hashes.get(i);
-      v.putShort(hash.length);
-      for (byte b : hash) {
-        v.putByte(b);
-      }
+    /**
+     * Constructs an empty attribute that can be used as prototype to be passed as argument of the method
+     * {@link ClassReader#accept(ClassVisitor, Attribute[], int)}.
+     */
+    public ModuleHashesAttribute() {
+        this(null, null, null);
     }
-    return v;
-  }
+
+    @Override
+    protected Attribute read(
+            ClassReader cr, int off, int len, char[] buf, int codeOff, Label[] labels) {
+        String hashAlgorithm = cr.readUTF8(off, buf);
+
+        int count = cr.readUnsignedShort(off + 2);
+        ArrayList<String> modules = new ArrayList<String>(count);
+        ArrayList<byte[]> hashes = new ArrayList<byte[]>(count);
+        off += 4;
+
+        for (int i = 0; i < count; i++) {
+            String module = cr.readModule(off, buf);
+            int hashLength = cr.readUnsignedShort(off + 2);
+            off += 4;
+
+            byte[] hash = new byte[hashLength];
+            for (int j = 0; j < hashLength; j++) {
+                hash[j] = (byte) (cr.readByte(off + j) & 0xff);
+            }
+            off += hashLength;
+
+            modules.add(module);
+            hashes.add(hash);
+        }
+        return new ModuleHashesAttribute(hashAlgorithm, modules, hashes);
+    }
+
+    @Override
+    protected ByteVector write(ClassWriter cw, byte[] code, int len, int maxStack, int maxLocals) {
+        ByteVector v = new ByteVector();
+        int index = cw.newUTF8(algorithm);
+        v.putShort(index);
+
+        int count = (modules == null) ? 0 : modules.size();
+        v.putShort(count);
+
+        for (int i = 0; i < count; i++) {
+            String module = modules.get(i);
+            v.putShort(cw.newModule(module));
+
+            byte[] hash = hashes.get(i);
+            v.putShort(hash.length);
+            for (byte b : hash) {
+                v.putByte(b);
+            }
+        }
+        return v;
+    }
 }

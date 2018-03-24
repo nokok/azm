@@ -39,175 +39,175 @@ import net.nokok.ow2asm.Opcodes;
  */
 public class CodeSizeEvaluator extends MethodVisitor implements Opcodes {
 
-  private int minSize;
+    private int minSize;
 
-  private int maxSize;
+    private int maxSize;
 
-  public CodeSizeEvaluator(final MethodVisitor mv) {
-    this(Opcodes.ASM6, mv);
-  }
-
-  protected CodeSizeEvaluator(final int api, final MethodVisitor mv) {
-    super(api, mv);
-  }
-
-  public int getMinSize() {
-    return this.minSize;
-  }
-
-  public int getMaxSize() {
-    return this.maxSize;
-  }
-
-  @Override
-  public void visitInsn(final int opcode) {
-    minSize += 1;
-    maxSize += 1;
-    super.visitInsn(opcode);
-  }
-
-  @Override
-  public void visitIntInsn(final int opcode, final int operand) {
-    if (opcode == SIPUSH) {
-      minSize += 3;
-      maxSize += 3;
-    } else {
-      minSize += 2;
-      maxSize += 2;
+    public CodeSizeEvaluator(final MethodVisitor mv) {
+        this(Opcodes.ASM6, mv);
     }
-    super.visitIntInsn(opcode, operand);
-  }
 
-  @Override
-  public void visitVarInsn(final int opcode, final int var) {
-    if (var < 4 && opcode != RET) {
-      minSize += 1;
-      maxSize += 1;
-    } else if (var >= 256) {
-      minSize += 4;
-      maxSize += 4;
-    } else {
-      minSize += 2;
-      maxSize += 2;
+    protected CodeSizeEvaluator(final int api, final MethodVisitor mv) {
+        super(api, mv);
     }
-    super.visitVarInsn(opcode, var);
-  }
 
-  @Override
-  public void visitTypeInsn(final int opcode, final String type) {
-    minSize += 3;
-    maxSize += 3;
-    super.visitTypeInsn(opcode, type);
-  }
-
-  @Override
-  public void visitFieldInsn(
-      final int opcode, final String owner, final String name, final String desc) {
-    minSize += 3;
-    maxSize += 3;
-    super.visitFieldInsn(opcode, owner, name, desc);
-  }
-
-  @Deprecated
-  @Override
-  public void visitMethodInsn(
-      final int opcode, final String owner, final String name, final String desc) {
-    if (api >= Opcodes.ASM5) {
-      super.visitMethodInsn(opcode, owner, name, desc);
-      return;
+    public int getMinSize() {
+        return this.minSize;
     }
-    doVisitMethodInsn(opcode, owner, name, desc, opcode == Opcodes.INVOKEINTERFACE);
-  }
 
-  @Override
-  public void visitMethodInsn(
-      final int opcode,
-      final String owner,
-      final String name,
-      final String desc,
-      final boolean itf) {
-    if (api < Opcodes.ASM5) {
-      super.visitMethodInsn(opcode, owner, name, desc, itf);
-      return;
+    public int getMaxSize() {
+        return this.maxSize;
     }
-    doVisitMethodInsn(opcode, owner, name, desc, itf);
-  }
 
-  private void doVisitMethodInsn(
-      int opcode, final String owner, final String name, final String desc, final boolean itf) {
-    if (opcode == INVOKEINTERFACE) {
-      minSize += 5;
-      maxSize += 5;
-    } else {
-      minSize += 3;
-      maxSize += 3;
+    @Override
+    public void visitInsn(final int opcode) {
+        minSize += 1;
+        maxSize += 1;
+        super.visitInsn(opcode);
     }
-    if (mv != null) {
-      mv.visitMethodInsn(opcode, owner, name, desc, itf);
+
+    @Override
+    public void visitIntInsn(final int opcode, final int operand) {
+        if (opcode == SIPUSH) {
+            minSize += 3;
+            maxSize += 3;
+        } else {
+            minSize += 2;
+            maxSize += 2;
+        }
+        super.visitIntInsn(opcode, operand);
     }
-  }
 
-  @Override
-  public void visitInvokeDynamicInsn(String name, String desc, Handle bsm, Object... bsmArgs) {
-    minSize += 5;
-    maxSize += 5;
-    super.visitInvokeDynamicInsn(name, desc, bsm, bsmArgs);
-  }
-
-  @Override
-  public void visitJumpInsn(final int opcode, final Label label) {
-    minSize += 3;
-    if (opcode == GOTO || opcode == JSR) {
-      maxSize += 5;
-    } else {
-      maxSize += 8;
+    @Override
+    public void visitVarInsn(final int opcode, final int var) {
+        if (var < 4 && opcode != RET) {
+            minSize += 1;
+            maxSize += 1;
+        } else if (var >= 256) {
+            minSize += 4;
+            maxSize += 4;
+        } else {
+            minSize += 2;
+            maxSize += 2;
+        }
+        super.visitVarInsn(opcode, var);
     }
-    super.visitJumpInsn(opcode, label);
-  }
 
-  @Override
-  public void visitLdcInsn(final Object cst) {
-    if (cst instanceof Long || cst instanceof Double) {
-      minSize += 3;
-      maxSize += 3;
-    } else {
-      minSize += 2;
-      maxSize += 3;
+    @Override
+    public void visitTypeInsn(final int opcode, final String type) {
+        minSize += 3;
+        maxSize += 3;
+        super.visitTypeInsn(opcode, type);
     }
-    super.visitLdcInsn(cst);
-  }
 
-  @Override
-  public void visitIincInsn(final int var, final int increment) {
-    if (var > 255 || increment > 127 || increment < -128) {
-      minSize += 6;
-      maxSize += 6;
-    } else {
-      minSize += 3;
-      maxSize += 3;
+    @Override
+    public void visitFieldInsn(
+            final int opcode, final String owner, final String name, final String desc) {
+        minSize += 3;
+        maxSize += 3;
+        super.visitFieldInsn(opcode, owner, name, desc);
     }
-    super.visitIincInsn(var, increment);
-  }
 
-  @Override
-  public void visitTableSwitchInsn(
-      final int min, final int max, final Label dflt, final Label... labels) {
-    minSize += 13 + labels.length * 4;
-    maxSize += 16 + labels.length * 4;
-    super.visitTableSwitchInsn(min, max, dflt, labels);
-  }
+    @Deprecated
+    @Override
+    public void visitMethodInsn(
+            final int opcode, final String owner, final String name, final String desc) {
+        if (api >= Opcodes.ASM5) {
+            super.visitMethodInsn(opcode, owner, name, desc);
+            return;
+        }
+        doVisitMethodInsn(opcode, owner, name, desc, opcode == Opcodes.INVOKEINTERFACE);
+    }
 
-  @Override
-  public void visitLookupSwitchInsn(final Label dflt, final int[] keys, final Label[] labels) {
-    minSize += 9 + keys.length * 8;
-    maxSize += 12 + keys.length * 8;
-    super.visitLookupSwitchInsn(dflt, keys, labels);
-  }
+    @Override
+    public void visitMethodInsn(
+            final int opcode,
+            final String owner,
+            final String name,
+            final String desc,
+            final boolean itf) {
+        if (api < Opcodes.ASM5) {
+            super.visitMethodInsn(opcode, owner, name, desc, itf);
+            return;
+        }
+        doVisitMethodInsn(opcode, owner, name, desc, itf);
+    }
 
-  @Override
-  public void visitMultiANewArrayInsn(final String desc, final int dims) {
-    minSize += 4;
-    maxSize += 4;
-    super.visitMultiANewArrayInsn(desc, dims);
-  }
+    private void doVisitMethodInsn(
+            int opcode, final String owner, final String name, final String desc, final boolean itf) {
+        if (opcode == INVOKEINTERFACE) {
+            minSize += 5;
+            maxSize += 5;
+        } else {
+            minSize += 3;
+            maxSize += 3;
+        }
+        if (mv != null) {
+            mv.visitMethodInsn(opcode, owner, name, desc, itf);
+        }
+    }
+
+    @Override
+    public void visitInvokeDynamicInsn(String name, String desc, Handle bsm, Object... bsmArgs) {
+        minSize += 5;
+        maxSize += 5;
+        super.visitInvokeDynamicInsn(name, desc, bsm, bsmArgs);
+    }
+
+    @Override
+    public void visitJumpInsn(final int opcode, final Label label) {
+        minSize += 3;
+        if (opcode == GOTO || opcode == JSR) {
+            maxSize += 5;
+        } else {
+            maxSize += 8;
+        }
+        super.visitJumpInsn(opcode, label);
+    }
+
+    @Override
+    public void visitLdcInsn(final Object cst) {
+        if (cst instanceof Long || cst instanceof Double) {
+            minSize += 3;
+            maxSize += 3;
+        } else {
+            minSize += 2;
+            maxSize += 3;
+        }
+        super.visitLdcInsn(cst);
+    }
+
+    @Override
+    public void visitIincInsn(final int var, final int increment) {
+        if (var > 255 || increment > 127 || increment < -128) {
+            minSize += 6;
+            maxSize += 6;
+        } else {
+            minSize += 3;
+            maxSize += 3;
+        }
+        super.visitIincInsn(var, increment);
+    }
+
+    @Override
+    public void visitTableSwitchInsn(
+            final int min, final int max, final Label dflt, final Label... labels) {
+        minSize += 13 + labels.length * 4;
+        maxSize += 16 + labels.length * 4;
+        super.visitTableSwitchInsn(min, max, dflt, labels);
+    }
+
+    @Override
+    public void visitLookupSwitchInsn(final Label dflt, final int[] keys, final Label[] labels) {
+        minSize += 9 + keys.length * 8;
+        maxSize += 12 + keys.length * 8;
+        super.visitLookupSwitchInsn(dflt, keys, labels);
+    }
+
+    @Override
+    public void visitMultiANewArrayInsn(final String desc, final int dims) {
+        minSize += 4;
+        maxSize += 4;
+        super.visitMultiANewArrayInsn(desc, dims);
+    }
 }
