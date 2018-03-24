@@ -1,4 +1,8 @@
+plugins {
+  id "com.jfrog.bintray" version "1.7.3"
+}
 apply plugin: 'java'
+apply plugin: 'maven-publish'
 
 repositories {
   mavenCentral()
@@ -10,7 +14,43 @@ test {
   }
 }
 
+tasks.withType(AbstractCompile)*.options*.encoding = tasks.withType(GroovyCompile)*.groovyOptions*.encoding = 'UTF-8'
+
+bintray {
+  user = System.getenv('BINTRAY_USER')
+  key = System.getenv('BINTRAY_KEY')
+  publications = ['MyPublication']
+  pkg {
+    repo = 'azm'
+    name = 'net.nokok'
+    licenses = ['BSD-3-Clause']
+    vcsUrl = 'https://github.com/nokok/azm'
+    version {
+      name = '0.1.2'
+      desc = ''
+      released = new Date()
+      vcsTag = '0.1.2'
+      attributes = [:]
+    }
+  }
+  filesSpec {
+    from 'build/libs'
+    into 'standalone_files/level1'
+  }
+}
+
 dependencies {
   testCompile 'org.junit.jupiter:junit-jupiter-api:5.0.0'
   testRuntime 'org.junit.jupiter:junit-jupiter-engine:5.0.0'
+}
+
+publishing {
+  publications {
+    MyPublication(MavenPublication) {
+      from components.java
+      groupId 'net.nokok'
+      artifactId 'azm'
+      version '0.1.2'
+    }
+  }
 }
