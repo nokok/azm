@@ -128,4 +128,11 @@ public class VarInsnNode extends AbstractInsnNode {
 
         return Objects.hash(super.hashCode(), getVar());
     }
+
+    @Override
+    public String toString() {
+        return "VarInsnNode{" +
+                "var=" + var +
+                '}';
+    }
 }

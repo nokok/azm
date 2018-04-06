@@ -294,4 +294,20 @@ public class FieldNode extends FieldVisitor {
 
         return Objects.hash(access, name, desc, signature, value);
     }
+
+    @Override
+    public String toString() {
+        return "FieldNode{" +
+                "access=" + access +
+                ", name='" + name + '\'' +
+                ", desc='" + desc + '\'' +
+                ", signature='" + signature + '\'' +
+                ", value=" + value +
+                ", visibleAnnotations=" + visibleAnnotations +
+                ", invisibleAnnotations=" + invisibleAnnotations +
+                ", visibleTypeAnnotations=" + visibleTypeAnnotations +
+                ", invisibleTypeAnnotations=" + invisibleTypeAnnotations +
+                ", attrs=" + attrs +
+                '}';
+    }
 }

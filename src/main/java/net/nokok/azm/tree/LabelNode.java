@@ -89,4 +89,11 @@ public class LabelNode extends AbstractInsnNode {
 
         return Objects.hash(super.hashCode(), value);
     }
+
+    @Override
+    public String toString() {
+        return "LabelNode{" +
+                "value=" + value +
+                '}';
+    }
 }

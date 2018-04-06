@@ -132,4 +132,13 @@ public class ModuleOpenNode {
 
         return Objects.hash(getPackaze(), getAccess(), getModules());
     }
+
+    @Override
+    public String toString() {
+        return "ModuleOpenNode{" +
+                "packaze='" + packaze + '\'' +
+                ", access=" + access +
+                ", modules=" + modules +
+                '}';
+    }
 }

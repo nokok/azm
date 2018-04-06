@@ -316,4 +316,16 @@ public abstract class AbstractInsnNode {
         }
         return this;
     }
+
+    @Override
+    public String toString() {
+        return "AbstractInsnNode{" +
+                "opcode=" + opcode +
+                ", visibleTypeAnnotations=" + visibleTypeAnnotations +
+                ", invisibleTypeAnnotations=" + invisibleTypeAnnotations +
+                ", previousInsn=" + previousInsn +
+                ", nextInsn=" + nextInsn +
+                ", index=" + index +
+                '}';
+    }
 }

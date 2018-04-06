@@ -224,4 +224,13 @@ public class FrameNode extends AbstractInsnNode {
 
         return Objects.hash(super.hashCode(), getType(), getLocal(), getStack());
     }
+
+    @Override
+    public String toString() {
+        return "FrameNode{" +
+                "type=" + type +
+                ", local=" + local +
+                ", stack=" + stack +
+                '}';
+    }
 }

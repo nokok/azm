@@ -110,4 +110,12 @@ public class MultiANewArrayInsnNode extends AbstractInsnNode {
 
         return Objects.hash(super.hashCode(), getDesc(), getDims());
     }
+
+    @Override
+    public String toString() {
+        return "MultiANewArrayInsnNode{" +
+                "desc='" + desc + '\'' +
+                ", dims=" + dims +
+                '}';
+    }
 }

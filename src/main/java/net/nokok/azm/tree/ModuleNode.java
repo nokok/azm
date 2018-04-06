@@ -364,4 +364,20 @@ public class ModuleNode extends ModuleVisitor {
 
         return Objects.hash(getName(), getAccess(), getVersion(), getMainClass(), getPackages(), getRequires(), getExports(), getOpens(), getUses(), getProvides());
     }
+
+    @Override
+    public String toString() {
+        return "ModuleNode{" +
+                "name='" + name + '\'' +
+                ", access=" + access +
+                ", version='" + version + '\'' +
+                ", mainClass='" + mainClass + '\'' +
+                ", packages=" + packages +
+                ", requires=" + requires +
+                ", exports=" + exports +
+                ", opens=" + opens +
+                ", uses=" + uses +
+                ", provides=" + provides +
+                '}';
+    }
 }

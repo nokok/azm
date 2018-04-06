@@ -103,4 +103,11 @@ public class IntInsnNode extends AbstractInsnNode {
 
         return Objects.hash(super.hashCode(), getOperand());
     }
+
+    @Override
+    public String toString() {
+        return "IntInsnNode{" +
+                "operand=" + operand +
+                '}';
+    }
 }

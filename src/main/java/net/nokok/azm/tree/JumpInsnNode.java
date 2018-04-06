@@ -109,4 +109,11 @@ public class JumpInsnNode extends AbstractInsnNode {
 
         return Objects.hash(super.hashCode(), getLabel());
     }
+
+    @Override
+    public String toString() {
+        return "JumpInsnNode{" +
+                "label=" + label +
+                '}';
+    }
 }

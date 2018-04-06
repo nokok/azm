@@ -138,4 +138,14 @@ public class InnerClassNode {
 
         return Objects.hash(getName(), getOuterName(), getInnerName(), getAccess());
     }
+
+    @Override
+    public String toString() {
+        return "InnerClassNode{" +
+                "name='" + name + '\'' +
+                ", outerName='" + outerName + '\'' +
+                ", innerName='" + innerName + '\'' +
+                ", access=" + access +
+                '}';
+    }
 }

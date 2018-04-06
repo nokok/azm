@@ -263,4 +263,12 @@ public class AnnotationNode extends AnnotationVisitor {
 
         return Objects.hash(getDesc(), getValues());
     }
+
+    @Override
+    public String toString() {
+        return "AnnotationNode{" +
+                "desc='" + desc + '\'' +
+                ", values=" + values +
+                '}';
+    }
 }

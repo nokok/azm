@@ -148,4 +148,14 @@ public class TableSwitchInsnNode extends AbstractInsnNode {
 
         return Objects.hash(super.hashCode(), getDflt(), getLabels());
     }
+
+    @Override
+    public String toString() {
+        return "TableSwitchInsnNode{" +
+                "min=" + min +
+                ", max=" + max +
+                ", dflt=" + dflt +
+                ", labels=" + labels +
+                '}';
+    }
 }

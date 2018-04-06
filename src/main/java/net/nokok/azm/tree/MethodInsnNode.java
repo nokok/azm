@@ -179,4 +179,14 @@ public class MethodInsnNode extends AbstractInsnNode {
 
         return Objects.hash(super.hashCode(), getOwner(), getName(), getDesc(), isItf());
     }
+
+    @Override
+    public String toString() {
+        return "MethodInsnNode{" +
+                "owner='" + owner + '\'' +
+                ", name='" + name + '\'' +
+                ", desc='" + desc + '\'' +
+                ", itf=" + itf +
+                '}';
+    }
 }

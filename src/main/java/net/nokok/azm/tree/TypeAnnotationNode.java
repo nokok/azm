@@ -119,4 +119,12 @@ public class TypeAnnotationNode extends AnnotationNode {
 
         return Objects.hash(super.hashCode(), getTypeRef(), getTypePath());
     }
+
+    @Override
+    public String toString() {
+        return "TypeAnnotationNode{" +
+                "typeRef=" + typeRef +
+                ", typePath=" + typePath +
+                '}';
+    }
 }

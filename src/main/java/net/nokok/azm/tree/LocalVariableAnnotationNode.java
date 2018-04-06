@@ -157,4 +157,13 @@ public class LocalVariableAnnotationNode extends TypeAnnotationNode {
 
         return Objects.hash(super.hashCode(), start, end, index);
     }
+
+    @Override
+    public String toString() {
+        return "LocalVariableAnnotationNode{" +
+                "start=" + start +
+                ", end=" + end +
+                ", index=" + index +
+                '}';
+    }
 }

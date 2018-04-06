@@ -109,4 +109,12 @@ public class IincInsnNode extends AbstractInsnNode {
 
         return Objects.hash(super.hashCode(), getVar(), getIncr());
     }
+
+    @Override
+    public String toString() {
+        return "IincInsnNode{" +
+                "var=" + var +
+                ", incr=" + incr +
+                '}';
+    }
 }

@@ -38,6 +38,7 @@ import net.nokok.azm.Type;
 import net.nokok.azm.TypePath;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -853,5 +854,35 @@ public class MethodNode extends MethodVisitor {
     public int hashCode() {
 
         return Objects.hash(access, name, desc, exceptions, parameters);
+    }
+
+    @Override
+    public String toString() {
+        return "MethodNode{" +
+                "access=" + access +
+                ", name='" + name + '\'' +
+                ", desc='" + desc + '\'' +
+                ", signature='" + signature + '\'' +
+                ", exceptions=" + exceptions +
+                ", parameters=" + parameters +
+                ", visibleAnnotations=" + visibleAnnotations +
+                ", invisibleAnnotations=" + invisibleAnnotations +
+                ", visibleTypeAnnotations=" + visibleTypeAnnotations +
+                ", invisibleTypeAnnotations=" + invisibleTypeAnnotations +
+                ", attrs=" + attrs +
+                ", annotationDefault=" + annotationDefault +
+                ", visibleAnnotableParameterCount=" + visibleAnnotableParameterCount +
+                ", visibleParameterAnnotations=" + (visibleParameterAnnotations == null ? null : Arrays.asList(visibleParameterAnnotations)) +
+                ", invisibleAnnotableParameterCount=" + invisibleAnnotableParameterCount +
+                ", invisibleParameterAnnotations=" + (invisibleParameterAnnotations == null ? null : Arrays.asList(invisibleParameterAnnotations)) +
+                ", instructions=" + instructions +
+                ", tryCatchBlocks=" + tryCatchBlocks +
+                ", maxStack=" + maxStack +
+                ", maxLocals=" + maxLocals +
+                ", localVariables=" + localVariables +
+                ", visibleLocalVariableAnnotations=" + visibleLocalVariableAnnotations +
+                ", invisibleLocalVariableAnnotations=" + invisibleLocalVariableAnnotations +
+                ", visited=" + visited +
+                '}';
     }
 }

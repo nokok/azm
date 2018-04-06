@@ -659,4 +659,14 @@ public class InsnList implements Collection<AbstractInsnNode> {
 
         return Objects.hash(size, firstInsn, lastInsn);
     }
+
+    @Override
+    public String toString() {
+        return "InsnList{" +
+                "size=" + size +
+                ", firstInsn=" + firstInsn +
+                ", lastInsn=" + lastInsn +
+                ", cache=" + (cache == null ? null : Arrays.asList(cache)) +
+                '}';
+    }
 }

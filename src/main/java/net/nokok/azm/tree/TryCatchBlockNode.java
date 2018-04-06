@@ -198,4 +198,16 @@ public class TryCatchBlockNode {
 
         return Objects.hash(getStart(), getEnd(), getHandler(), getType());
     }
+
+    @Override
+    public String toString() {
+        return "TryCatchBlockNode{" +
+                "start=" + start +
+                ", end=" + end +
+                ", handler=" + handler +
+                ", type='" + type + '\'' +
+                ", visibleTypeAnnotations=" + visibleTypeAnnotations +
+                ", invisibleTypeAnnotations=" + invisibleTypeAnnotations +
+                '}';
+    }
 }

@@ -97,4 +97,11 @@ public class LdcInsnNode extends AbstractInsnNode {
 
         return Objects.hash(super.hashCode(), getCst());
     }
+
+    @Override
+    public String toString() {
+        return "LdcInsnNode{" +
+                "cst=" + cst +
+                '}';
+    }
 }

@@ -133,4 +133,13 @@ public class ModuleExportNode {
 
         return Objects.hash(getPackaze(), getAccess(), getModules());
     }
+
+    @Override
+    public String toString() {
+        return "ModuleExportNode{" +
+                "packaze='" + packaze + '\'' +
+                ", access=" + access +
+                ", modules=" + modules +
+                '}';
+    }
 }

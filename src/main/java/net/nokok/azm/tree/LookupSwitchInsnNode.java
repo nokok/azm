@@ -139,4 +139,13 @@ public class LookupSwitchInsnNode extends AbstractInsnNode {
 
         return Objects.hash(super.hashCode(), getDflt(), getKeys(), getLabels());
     }
+
+    @Override
+    public String toString() {
+        return "LookupSwitchInsnNode{" +
+                "dflt=" + dflt +
+                ", keys=" + keys +
+                ", labels=" + labels +
+                '}';
+    }
 }

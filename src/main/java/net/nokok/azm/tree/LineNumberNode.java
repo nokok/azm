@@ -109,4 +109,12 @@ public class LineNumberNode extends AbstractInsnNode {
 
         return Objects.hash(super.hashCode(), getLine(), getStart());
     }
+
+    @Override
+    public String toString() {
+        return "LineNumberNode{" +
+                "line=" + line +
+                ", start=" + start +
+                '}';
+    }
 }

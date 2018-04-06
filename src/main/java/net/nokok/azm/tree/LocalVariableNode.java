@@ -170,4 +170,16 @@ public class LocalVariableNode {
 
         return Objects.hash(getName(), getDesc(), getSignature(), getStart(), getEnd(), getIndex());
     }
+
+    @Override
+    public String toString() {
+        return "LocalVariableNode{" +
+                "name='" + name + '\'' +
+                ", desc='" + desc + '\'' +
+                ", signature='" + signature + '\'' +
+                ", start=" + start +
+                ", end=" + end +
+                ", index=" + index +
+                '}';
+    }
 }

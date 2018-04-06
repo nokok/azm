@@ -102,4 +102,12 @@ public class ParameterNode {
 
         return Objects.hash(getName(), getAccess());
     }
+
+    @Override
+    public String toString() {
+        return "ParameterNode{" +
+                "name='" + name + '\'' +
+                ", access=" + access +
+                '}';
+    }
 }

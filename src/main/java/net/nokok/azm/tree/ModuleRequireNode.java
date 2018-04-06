@@ -131,4 +131,13 @@ public class ModuleRequireNode {
 
         return Objects.hash(getModule(), getAccess(), getVersion());
     }
+
+    @Override
+    public String toString() {
+        return "ModuleRequireNode{" +
+                "module='" + module + '\'' +
+                ", access=" + access +
+                ", version='" + version + '\'' +
+                '}';
+    }
 }

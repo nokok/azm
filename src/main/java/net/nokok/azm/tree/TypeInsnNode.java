@@ -117,4 +117,11 @@ public class TypeInsnNode extends AbstractInsnNode {
 
         return Objects.hash(super.hashCode(), getDesc());
     }
+
+    @Override
+    public String toString() {
+        return "TypeInsnNode{" +
+                "desc='" + desc + '\'' +
+                '}';
+    }
 }

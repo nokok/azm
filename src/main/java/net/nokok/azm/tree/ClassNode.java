@@ -443,4 +443,30 @@ public class ClassNode extends ClassVisitor {
 
         return Objects.hash(version, access, name, signature, superName, interfaces);
     }
+
+    @Override
+    public String toString() {
+        return "ClassNode{" +
+                "version=" + version +
+                ", access=" + access +
+                ", name='" + name + '\'' +
+                ", signature='" + signature + '\'' +
+                ", superName='" + superName + '\'' +
+                ", interfaces=" + interfaces +
+                ", sourceFile='" + sourceFile + '\'' +
+                ", sourceDebug='" + sourceDebug + '\'' +
+                ", module=" + module +
+                ", outerClass='" + outerClass + '\'' +
+                ", outerMethod='" + outerMethod + '\'' +
+                ", outerMethodDesc='" + outerMethodDesc + '\'' +
+                ", visibleAnnotations=" + visibleAnnotations +
+                ", invisibleAnnotations=" + invisibleAnnotations +
+                ", visibleTypeAnnotations=" + visibleTypeAnnotations +
+                ", invisibleTypeAnnotations=" + invisibleTypeAnnotations +
+                ", attrs=" + attrs +
+                ", innerClasses=" + innerClasses +
+                ", fields=" + fields +
+                ", methods=" + methods +
+                '}';
+    }
 }

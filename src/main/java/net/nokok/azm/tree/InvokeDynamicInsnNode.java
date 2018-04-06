@@ -153,4 +153,14 @@ public class InvokeDynamicInsnNode extends AbstractInsnNode {
         result = 31 * result + Arrays.hashCode(getBsmArgs());
         return result;
     }
+
+    @Override
+    public String toString() {
+        return "InvokeDynamicInsnNode{" +
+                "name='" + name + '\'' +
+                ", desc='" + desc + '\'' +
+                ", bsm=" + bsm +
+                ", bsmArgs=" + (bsmArgs == null ? null : Arrays.asList(bsmArgs)) +
+                '}';
+    }
 }

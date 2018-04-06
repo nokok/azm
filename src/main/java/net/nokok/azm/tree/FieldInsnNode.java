@@ -141,4 +141,13 @@ public class FieldInsnNode extends AbstractInsnNode {
 
         return Objects.hash(super.hashCode(), getOwner(), getName(), getDesc());
     }
+
+    @Override
+    public String toString() {
+        return "FieldInsnNode{" +
+                "owner='" + owner + '\'' +
+                ", name='" + name + '\'' +
+                ", desc='" + desc + '\'' +
+                '}';
+    }
 }

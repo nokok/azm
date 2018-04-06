@@ -100,4 +100,12 @@ public class ModuleProvideNode {
 
         return Objects.hash(getService(), getProviders());
     }
+
+    @Override
+    public String toString() {
+        return "ModuleProvideNode{" +
+                "service='" + service + '\'' +
+                ", providers=" + providers +
+                '}';
+    }
 }
